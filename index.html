@@ -94,6 +94,10 @@
           <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"></path><path d="M12 19v3"></path></svg>
         );
 
+        const IconMail = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+        );
+
         const COMMANDER_CARD = {
           id: 1,
           title: "Rosie Choi",
@@ -165,7 +169,7 @@
             manaColor: "bg-gradient-to-r from-amber-200 via-purple-300 to-red-300 text-slate-900",
             stats: "",
             flavor: "Artifact 3. An AI-powered tool for Magic: The Gathering that evaluates complex board states and suggests optimal plays or infinite combo lines.",
-            effect: "At the beginning of your upkeep, analyze the board. You may scry 3, then draw a card."
+            effect: "If Rosie Choi and The Resume are on the battlefield alongside this card, your Portfolio Site might just yield the ultimate combo."
           },
           {
             id: 6,
@@ -240,6 +244,20 @@
             stats: "",
             flavor: "A seasoned developer never loses work. They just fetch it from the repository.",
             effect: "Return target card from your graveyard to your hand."
+          },
+          {
+            id: 99,
+            title: "Let's Connect!",
+            type: "Sorcery",
+            cost: "0",
+            rarity: "Mythic",
+            icon: IconSparkles,
+            color: "from-amber-400 via-yellow-300 to-amber-500",
+            borderColor: "border-[#D4AF37]",
+            manaColor: "bg-white text-black",
+            stats: "",
+            flavor: "The combo is complete. The board is yours. Now, let's build something amazing together.",
+            effect: "You win the game. (Play this card to open my contact information and claim your victory!)"
           }
         ];
 
@@ -572,9 +590,11 @@
           const [hasDrawnOrianna, setHasDrawnOrianna] = useState(false);
           const [hasPlayedOrianna, setHasPlayedOrianna] = useState(false);
           const [hasPlayedHobbies, setHasPlayedHobbies] = useState(false);
+          const [hasDrawnContact, setHasDrawnContact] = useState(false);
           const [graveyardIds, setGraveyardIds] = useState([]);
           
           const [showResumeModal, setShowResumeModal] = useState(false);
+          const [showContactScreen, setShowContactScreen] = useState(false);
 
           const hoverTimeoutRef = useRef(null);
 
@@ -669,10 +689,26 @@
                 setHandIds(prev => prev.filter(i => i !== dragging.id));
                 const cardData = CARDS.find(c => c.id === dragging.id);
                 
-                if (cardData && cardData.id === 3 && !hasDrawnOrianna) {
-                    setHasDrawnOrianna(true);
-                    setHandIds(prev => [...prev.filter(i => i !== dragging.id), 8]);
-                    setLibraryCount(prev => prev - 1);
+                if (cardData && cardData.id === 3) {
+                    // PUZZLE LOGIC: Check if the combo is assembled!
+                    // 1. Commander must be on board
+                    // 2. The Resume (id: 2) must be on board
+                    // 3. Board State Analyzer (id: 5) must be on board
+                    // 4. Orianna must have already been drawn (meaning they used Regrowth to do this!)
+                    const isComboReady = !commanderState.inZone && 
+                                         boardCards.some(c => c.id === 2) && 
+                                         boardCards.some(c => c.id === 5) &&
+                                         hasDrawnOrianna;
+                                         
+                    if (isComboReady && !hasDrawnContact) {
+                        setHasDrawnContact(true);
+                        setHandIds(prev => [...prev.filter(i => i !== dragging.id), 99]); // Draw Let's Connect!
+                        setLibraryCount(prev => prev - 1);
+                    } else if (!hasDrawnOrianna) {
+                        setHasDrawnOrianna(true);
+                        setHandIds(prev => [...prev.filter(i => i !== dragging.id), 8]); // Draw Orianna
+                        setLibraryCount(prev => prev - 1);
+                    }
                 }
                 
                 if (cardData && cardData.id === 8 && !hasPlayedOrianna) {
@@ -694,6 +730,10 @@
                     setLife(prev => prev - 2);
                     setLifeFlash(true);
                     setTimeout(() => setLifeFlash(false), 500);
+                }
+                
+                if (cardData && cardData.id === 99) {
+                    setShowContactScreen(true);
                 }
 
                 if (cardData && (cardData.type.includes("Sorcery") || cardData.type.includes("Instant"))) {
@@ -918,10 +958,44 @@
                         Close [X]
                       </button>
                     </div>
-                    <div className="flex-1 w-full overflow-auto bg-stone-300 p-4">
-                       <img src="Rosie_Choi.png" alt="Rosie Choi Resume" className="w-full md:w-[850px] max-w-none h-auto shadow-2xl border border-stone-400 block mx-auto" />
+                    <div className="flex-1 w-full overflow-auto bg-stone-300 p-4 flex justify-center block">
+                       <img src="Rosie_Choi.png" alt="Rosie Choi Resume" className="w-[850px] max-w-none h-auto shadow-2xl border border-stone-400 block" />
                     </div>
                   </div>
+                </div>
+              )}
+              
+              {showContactScreen && (
+                <div className="fixed inset-0 z-[300] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in duration-1000">
+                   <IconSparkles size={80} className="text-[#D4AF37] mb-6 animate-pulse" />
+                   <h1 className="text-5xl md:text-7xl font-serif font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-[#D4AF37] to-amber-700 drop-shadow-[0_0_20px_rgba(212,175,55,0.5)] mb-4 text-center">
+                     YOU WIN!
+                   </h1>
+                   <p className="text-xl md:text-2xl font-sans text-stone-300 text-center max-w-2xl mb-8 leading-relaxed">
+                     You successfully navigated the graveyard, assembled the infinite combo, and demonstrated a mastery of state management and UI interactions. 
+                   </p>
+                   <p className="text-lg text-amber-500 font-serif italic mb-10 text-center">
+                     "The best software architectures are just well-constructed infinite combos."
+                   </p>
+                   
+                   <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                     <a href="mailto:rosiesuchoi@gmail.com" className="px-6 py-3 bg-red-700 text-white font-bold font-sans rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                       <IconMail size={18} /> Email Me
+                     </a>
+                     <a href="https://linkedin.com/in/rosiesuchoi" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-blue-700 text-white font-bold font-sans rounded-full shadow-[0_0_15px_rgba(29,78,216,0.5)] hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                       <IconBriefcase size={18} /> LinkedIn
+                     </a>
+                     <a href="https://github.com/rosiesuchoi" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-stone-700 text-white font-bold font-sans rounded-full shadow-[0_0_15px_rgba(68,64,60,0.5)] hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                       <IconCode size={18} /> GitHub
+                     </a>
+                   </div>
+                   
+                   <button 
+                     className="px-8 py-3 border-2 border-[#D4AF37] text-[#D4AF37] font-bold font-sans rounded-full hover:bg-[#D4AF37]/10 transition-colors"
+                     onClick={() => setShowContactScreen(false)}
+                   >
+                     Keep Playing
+                   </button>
                 </div>
               )}
             </div>
