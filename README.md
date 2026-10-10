@@ -132,4 +132,8 @@ Created "Version Control" (Secret Lair Regrowth - 1 G Sorcery).
 
 Updated Orianna's drop logic to add Version Control to hand.
 
+<<<<<<< HEAD
 Updated Version Control's drop logic to pop the last item off the graveyardIds array and push it into the handIds array, then put itself into the graveyard.
+=======
+Updated Version Control's drop logic to pop the last item off the graveyardIds array and push it into the handIds array, then put itself into the graveyard.
+>>>>>>> 7dc98da710b3acd23f4690ff5d436baa30d7785a
