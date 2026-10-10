@@ -18,7 +18,6 @@
     <script type="text/babel">
         const { useState, useRef, useEffect } = React;
 
-        // Custom inline SVG icons to prevent any external CDN namespace failures
         const IconUser = ({ size = 24, className = "" }) => (
           <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
@@ -66,6 +65,35 @@
           </svg>
         );
 
+        const IconCat = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3.1-9-7.56c0-1.25.43-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z"/>
+            <path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75Z"/>
+          </svg>
+        );
+
+        const IconFlame = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+          </svg>
+        );
+
+        const IconSun = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+        );
+
+        const IconDrop = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+        );
+
+        const IconSkull = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M8 20v2h8v-2"></path><path d="m12.5 17-.5-1-.5 1h1z"></path><path d="M16 20a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20"></path></svg>
+        );
+
+        const IconTree = ({ size = 24, className = "" }) => (
+          <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"></path><path d="M12 19v3"></path></svg>
+        );
+
         const COMMANDER_CARD = {
           id: 1,
           title: "Rosie Choi",
@@ -86,16 +114,16 @@
           {
             id: 2,
             title: "The Resume",
-            type: "Artifact — Equipment",
-            cost: "3",
+            type: "Enchantment",
+            cost: "2 R",
             rarity: "Rare",
             icon: IconBriefcase,
-            color: "from-slate-700 to-slate-400",
+            color: "from-red-800 to-red-600",
             borderColor: "border-[#c0c0c0]",
-            manaColor: "bg-slate-300 text-slate-800",
+            manaColor: "bg-red-200 text-red-900",
             stats: "",
-            flavor: "Experience: Implementation Consultant Intern at FAST Enterprises (C#, PostgreSQL), Data Analyst at Amazon. Projects: Aether Log Core, HuskyMap LLM.",
-            effect: "Equipped creature gets +5 to technical interviews and gains advantage on architecture rolls.\n\nEquip {2}"
+            flavor: "SWE Intern @ FAST Enterprises • Data Analyst @ Amazon • Apple Specialist. \n1st Place PSPC, 2nd Place UHackathon, 7th Place ICPC. \nSkilled in Java, C#, Python, React, and RAG architectures.",
+            effect: "Creatures you control get +5 to technical interviews and gain advantage on architecture rolls.\n\nTap this card while on the battlefield to reveal the full document."
           },
           {
             id: 3,
@@ -166,8 +194,98 @@
             stats: "",
             flavor: "Artifact 5. A computer vision tool that analyzes skin undertones to recommend accurate base foundation matches across brands.",
             effect: "Whenever a creature enters the battlefield under your control, put a +1/+1 counter on it and it gains hexproof until end of turn."
+          },
+          {
+            id: 8,
+            title: "Orianna",
+            actualName: "Helpful Hunter",
+            type: "Creature — Cat",
+            cost: "1 W",
+            rarity: "Uncommon",
+            icon: null, // Using image instead
+            image: "orianna.jpg",
+            color: "from-stone-200 to-white",
+            borderColor: "border-[#718096]",
+            manaColor: "bg-stone-200 text-slate-800",
+            stats: "1/1",
+            flavor: "This is Orianna, my little fur baby!",
+            effect: "When this creature enters the battlefield, draw a card."
+          },
+          {
+            id: 9,
+            title: "My Hobbies",
+            actualName: "Infernal Grasp",
+            type: "Instant",
+            cost: "1 B",
+            rarity: "Uncommon",
+            icon: IconFlame,
+            color: "from-stone-800 to-black",
+            borderColor: "border-[#718096]",
+            manaColor: "bg-stone-400 text-black",
+            stats: "",
+            flavor: "Including Magic: The Gathering, playing with my cat, playing PC games with friends online, and socializing and networking with others.",
+            effect: "Destroy target creature. You lose 2 life."
+          },
+          {
+            id: 21,
+            title: "Version Control",
+            actualName: "Regrowth",
+            type: "Sorcery",
+            cost: "1 G",
+            rarity: "Uncommon",
+            icon: IconTree,
+            color: "from-green-700 to-emerald-900",
+            borderColor: "border-[#718096]",
+            manaColor: "bg-green-200 text-green-900",
+            stats: "",
+            flavor: "A seasoned developer never loses work. They just fetch it from the repository.",
+            effect: "Return target card from your graveyard to your hand."
           }
         ];
+
+        const LANDS_AND_OMNISCIENCE = [
+          {
+            id: 10,
+            title: "Omniscience",
+            type: "Enchantment",
+            cost: "7 U U U",
+            rarity: "Mythic",
+            icon: IconBrain,
+            color: "from-blue-700 to-cyan-500",
+            borderColor: "border-[#D4AF37]",
+            manaColor: "bg-blue-100 text-blue-900",
+            stats: "",
+            flavor: "The culmination of a rigorous computer science education: the sudden, terrifying realization that you can build anything.",
+            effect: "You may cast spells from your hand without paying their mana costs."
+          },
+          ...[
+            { id: 11, name: "Plains", icon: IconSun, color: "from-yellow-100 to-amber-50", manaColor: "bg-white text-black" },
+            { id: 12, name: "Plains", icon: IconSun, color: "from-yellow-100 to-amber-50", manaColor: "bg-white text-black" },
+            { id: 13, name: "Island", icon: IconDrop, color: "from-blue-500 to-blue-200", manaColor: "bg-blue-100 text-blue-900" },
+            { id: 14, name: "Island", icon: IconDrop, color: "from-blue-500 to-blue-200", manaColor: "bg-blue-100 text-blue-900" },
+            { id: 15, name: "Swamp", icon: IconSkull, color: "from-purple-900 to-stone-800", manaColor: "bg-stone-300 text-black" },
+            { id: 16, name: "Swamp", icon: IconSkull, color: "from-purple-900 to-stone-800", manaColor: "bg-stone-300 text-black" },
+            { id: 17, name: "Mountain", icon: IconFlame, color: "from-red-600 to-orange-500", manaColor: "bg-red-200 text-red-900" },
+            { id: 18, name: "Mountain", icon: IconFlame, color: "from-red-600 to-orange-500", manaColor: "bg-red-200 text-red-900" },
+            { id: 19, name: "Forest", icon: IconTree, color: "from-green-600 to-emerald-400", manaColor: "bg-green-200 text-green-900" },
+            { id: 20, name: "Forest", icon: IconTree, color: "from-green-600 to-emerald-400", manaColor: "bg-green-200 text-green-900" }
+          ].map(l => ({
+            id: l.id,
+            title: l.name,
+            type: `Basic Land — ${l.name}`,
+            cost: "",
+            rarity: "Basic Land",
+            icon: l.icon,
+            color: l.color,
+            borderColor: "border-[#111]",
+            manaColor: l.manaColor,
+            stats: "",
+            flavor: "",
+            effect: `T: Add ${l.name === 'Plains' ? 'W' : l.name === 'Island' ? 'U' : l.name === 'Swamp' ? 'B' : l.name === 'Mountain' ? 'R' : 'G'}.`
+          }))
+        ];
+
+        CARDS.push(...LANDS_AND_OMNISCIENCE);
 
         const CardFace = ({ card }) => {
           const IconComp = card.icon;
@@ -177,13 +295,11 @@
                 <div className="text-[6px] sm:text-[8px] md:text-[10px] font-bold text-black truncate pr-1">
                   {card.title}
                 </div>
-                <div className={`text-[6px] sm:text-[8px] font-bold px-1 rounded-full border border-black/25 shadow-inner ${card.manaColor}`}>
-                  {card.cost}
-                </div>
-              </div>
-              
-              <div className="mx-1 mt-1 flex-1 bg-slate-800 border-2 border-black/80 shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] flex items-center justify-center relative overflow-hidden">
-                 <IconComp className="text-white/60 drop-shadow-md z-10 w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8" />
+                {card.cost && (
+                  <div className={`text-[6px] sm:text-[8px] font-bold px-1 rounded-full border border-black/25 shadow-inner ${card.manaColor}`}>
+                    {card.cost}
+                  </div>
+                )}
               </div>
 
               <div className="mx-1 mt-1 bg-[#c9d8c9] border border-black/50 rounded shadow-sm px-1 flex items-center relative z-10">
@@ -195,14 +311,14 @@
           );
         };
 
-        const BoardCard = ({ card, x, y, isDragging, onPointerDown, onMouseEnter, onMouseLeave }) => {
+        const BoardCard = ({ card, x, y, isDragging, isTapped, onPointerDown, onMouseEnter, onMouseLeave }) => {
           return (
             <div
               onPointerDown={(e) => onPointerDown(e, card.id, card.id === COMMANDER_CARD.id ? 'commander' : 'board')}
-              onMouseEnter={onMouseEnter}
+              onMouseEnter={(e) => onMouseEnter(e, card.id, 'board')}
               onMouseLeave={onMouseLeave}
-              style={{ left: x, top: y, opacity: isDragging ? 0.3 : 1, position: 'absolute' }}
-              className="w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-xl cursor-grab active:cursor-grabbing hover:scale-105 transition-transform origin-center z-20"
+              style={{ left: x, top: y, opacity: isDragging ? 0.3 : 1, position: 'fixed' }}
+              className={`w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-xl cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-20 touch-none ${isTapped ? 'rotate-90' : 'rotate-0'} ${!isDragging ? 'hover:scale-105 hover:z-30' : ''}`}
             >
               <CardFace card={card} />
               {!isDragging && (
@@ -216,10 +332,10 @@
           return (
             <div
               onPointerDown={(e) => onPointerDown(e, card.id, 'commander')}
-              onMouseEnter={onMouseEnter}
+              onMouseEnter={(e) => onMouseEnter(e, card.id, 'commander')}
               onMouseLeave={onMouseLeave}
               style={{ opacity: isDragging ? 0.3 : 1 }}
-              className="relative w-20 sm:w-24 md:w-28 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-lg cursor-grab active:cursor-grabbing flex-shrink-0 border-2 border-stone-700 hover:border-amber-400 transition-all z-10"
+              className="relative w-20 sm:w-24 md:w-28 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-lg cursor-grab active:cursor-grabbing flex-shrink-0 border-2 border-stone-700 hover:border-amber-400 transition-all z-10 touch-none"
             >
               <CardFace card={card} />
             </div>
@@ -230,6 +346,7 @@
           const cardRef = useRef(null);
           const [tilt, setTilt] = useState({ x: 0, y: 0 });
           const [isDrawn, setIsDrawn] = useState(false);
+          const [isHovering, setIsHovering] = useState(false);
 
           useEffect(() => {
             const timer = setTimeout(() => {
@@ -243,16 +360,22 @@
             const rect = cardRef.current.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
-            const multiplier = 20; 
+            const multiplier = 10; 
             setTilt({
               x: (y / (rect.height / 2)) * -multiplier,
               y: (x / (rect.width / 2)) * multiplier
             });
           };
+          
+          const handleMouseEnterInner = (e) => {
+            setIsHovering(true);
+            if (onMouseEnter) onMouseEnter(e, card.id, 'hand');
+          };
 
           const handleMouseLeaveInner = () => {
+            setIsHovering(false);
             setTilt({ x: 0, y: 0 });
-            onMouseLeave();
+            if (onMouseLeave) onMouseLeave();
           };
 
           const centerIndex = (total - 1) / 2;
@@ -270,17 +393,18 @@
               opacity: 0,
               pointerEvents: 'none'
             };
-          } else if (tilt.x !== 0 || tilt.y !== 0) {
+          } else if (isHovering && !isDragging) {
             style = {
-              transform: `translate(${xOffsetCSS}, -120px) rotate(0deg) scale(1.6) perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transform: `translate(${xOffsetCSS}, -50px) rotate(0deg) scale(1.15) perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               zIndex: 50,
               transition: 'transform 0.1s ease-out',
-              opacity: isDragging ? 0 : 1
+              opacity: 1
             };
           } else {
             style = {
               transform: `translate(${xOffsetCSS}, ${yOffset}px) rotate(${rotation}deg)`,
               zIndex: index,
+              transition: 'transform 0.3s ease-out',
               opacity: isDragging ? 0.3 : 1
             };
           }
@@ -289,11 +413,11 @@
             <div
               ref={cardRef}
               onPointerDown={(e) => onPointerDown(e, card.id, 'hand')}
-              onMouseEnter={onMouseEnter}
+              onMouseEnter={handleMouseEnterInner}
               onMouseLeave={handleMouseLeaveInner}
               onMouseMove={handleMouseMove}
               style={style}
-              className="absolute bottom-0 w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-2xl cursor-grab active:cursor-grabbing origin-bottom transition-all duration-300 ease-out preserve-3d"
+              className="absolute bottom-0 w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-2xl cursor-grab active:cursor-grabbing origin-bottom preserve-3d touch-none"
             >
               <CardFace card={card} />
             </div>
@@ -302,18 +426,50 @@
 
         const MTGCardPreview = ({ card }) => {
           const IconComp = card.icon;
+          const previewRef = useRef(null);
+          const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+          const handleMouseMove = (e) => {
+            if (!previewRef.current) return;
+            const rect = previewRef.current.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const multiplier = 15; // Max 3D rotation degrees
+            setTilt({
+              x: (y / (rect.height / 2)) * -multiplier,
+              y: (x / (rect.width / 2)) * multiplier
+            });
+          };
+
+          const handleMouseLeave = () => {
+            setTilt({ x: 0, y: 0 });
+          };
+
           return (
-            <div className="w-full max-w-[200px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px] flex-shrink-0 perspective-[1000px] group mx-auto">
-              <div className="relative w-full aspect-[2.5/3.5] rounded-[20px] bg-black p-2 shadow-[0_20px_50px_rgba(0,0,0,0.9)] transform transition-transform duration-500">
+            <div 
+              className="w-full max-w-[200px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px] flex-shrink-0 perspective-[1000px] group mx-auto"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div 
+                ref={previewRef}
+                className="relative w-full aspect-[2.5/3.5] rounded-[20px] bg-black p-2 shadow-[0_20px_50px_rgba(0,0,0,0.9)] preserve-3d"
+                style={{ 
+                  transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1.02, 1.02, 1.02)`,
+                  transition: 'transform 0.1s ease-out'
+                }}
+              >
                 <div className={`relative h-full w-full bg-gradient-to-br ${card.color} rounded-[12px] border-4 ${card.borderColor} flex flex-col overflow-hidden`}>
                   <div className="absolute inset-0 opacity-20 mix-blend-multiply" 
                        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
 
                   <div className="mx-2 mt-2 bg-gradient-to-b from-[#e3e8e3] to-[#c9d8c9] border-2 border-black/60 rounded-[4px] px-2 py-1 flex justify-between items-center shadow-md relative z-10">
                     <h2 className="text-sm md:text-base font-bold text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">{card.title}</h2>
-                    <div className={`rounded-full px-2 py-0.5 text-xs font-sans font-bold shadow-inner border border-black/30 ${card.manaColor}`}>
-                      {card.cost}
-                    </div>
+                    {card.cost && (
+                      <div className={`rounded-full px-2 py-0.5 text-xs font-sans font-bold shadow-inner border border-black/30 ${card.manaColor}`}>
+                        {card.cost}
+                      </div>
+                    )}
                   </div>
 
                   {card.actualName && (
@@ -323,8 +479,15 @@
                   )}
 
                   <div className={`mx-2 flex-1 rounded-[4px] border-2 border-black/80 bg-stone-900 flex items-center justify-center shadow-[inset_0_0_20px_rgba(0,0,0,0.9)] relative overflow-hidden group-hover:shadow-[inset_0_0_30px_rgba(0,0,0,1)] transition-shadow ${card.actualName ? 'mt-1' : 'mt-2'}`}>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-                    <IconComp size={80} className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.5)] z-10 transform transition-transform group-hover:scale-110 duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none z-10" />
+                    {card.image ? (
+                       <React.Fragment>
+                         <img src={card.image} alt="" className="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-125 pointer-events-none" />
+                         <img src={card.image} alt={card.title} className="relative w-full h-full object-contain transform transition-transform group-hover:scale-110 duration-700 z-10" />
+                       </React.Fragment>
+                    ) : (
+                       <IconComp size={80} className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.5)] z-10 transform transition-transform group-hover:scale-110 duration-700" />
+                    )}
                   </div>
 
                   <div className="mx-2 mt-2 bg-gradient-to-b from-[#e3e8e3] to-[#c9d8c9] border-2 border-black/60 rounded-[4px] px-2 py-1 flex justify-between items-center shadow-md relative z-10">
@@ -367,29 +530,99 @@
         );
 
         function App() {
-          const [handIds, setHandIds] = useState(CARDS.map(c => c.id));
-          const [boardCards, setBoardCards] = useState([]);
+          // Hand contains IDs 2 through 9 (excluding 8, which is Orianna)
+          const [handIds, setHandIds] = useState(() => CARDS.map(c => c.id).filter(id => id < 10 && id !== 8)); 
+          
+          // Initialize board with Omniscience and 10 lands cleanly fanned out in a horizontal line
+          const [boardCards, setBoardCards] = useState(() => {
+             const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
+             const h = typeof window !== 'undefined' ? window.innerHeight : 800;
+             
+             const landIds = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+             const spacing = Math.min(90, (w - 200) / landIds.length);
+             const startX = (w - (spacing * (landIds.length - 1)) - 100) / 2; 
+             const startY = h / 2 + 10;
+
+             const initialBoard = [
+               { id: 10, x: w / 2 - 60, y: startY - 200, tapped: false } // Omniscience centered high up
+             ];
+
+             landIds.forEach((id, index) => {
+               initialBoard.push({
+                 id,
+                 x: startX + (index * spacing),
+                 y: startY,
+                 tapped: false
+               });
+             });
+
+             return initialBoard;
+          });
+
           const [commanderState, setCommanderState] = useState({ inZone: true, x: 0, y: 0 });
-          const [activeCardId, setActiveCardId] = useState(null);
-          const [hoveredCardId, setHoveredCardId] = useState(null);
+          const [hoverState, setHoverState] = useState(null); 
           const [dragging, setDragging] = useState(null);
+          
+          const [life, setLife] = useState(40);
+          const [lifeFlash, setLifeFlash] = useState(false);
+          
+          // 99 cards total - 7 in hand - 11 on board = 81 remaining
+          const [libraryCount, setLibraryCount] = useState(81);
+          
+          const [hasDrawnOrianna, setHasDrawnOrianna] = useState(false);
+          const [hasPlayedOrianna, setHasPlayedOrianna] = useState(false);
+          const [hasPlayedHobbies, setHasPlayedHobbies] = useState(false);
+          const [graveyardIds, setGraveyardIds] = useState([]);
+          
+          const [showResumeModal, setShowResumeModal] = useState(false);
+
+          const hoverTimeoutRef = useRef(null);
 
           const handlePointerDown = (e, id, source) => {
-            if (e.button !== 0) return;
+            if (e.button !== 0) return; 
             e.preventDefault();
             e.stopPropagation();
+            
+            if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+            setHoverState(null);
+            
             const node = e.currentTarget;
-            const offsetX = node.offsetWidth / 2;
-            const offsetY = node.offsetHeight / 2;
+            const rect = node.getBoundingClientRect();
+            
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+
             setDragging({
               id,
               source,
               offsetX,
               offsetY,
               x: e.clientX - offsetX,
-              y: e.clientY - offsetY
+              y: e.clientY - offsetY,
+              initialMouseX: e.clientX,
+              initialMouseY: e.clientY
             });
-            setActiveCardId(id);
+          };
+
+          const handleMouseEnter = (e, id, source) => {
+            const cardData = CARDS.find(c => c.id === id);
+            // Ignore hover effects completely for basic lands to reduce visual clutter
+            if (cardData && cardData.rarity === "Basic Land") {
+               return; 
+            }
+
+            if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+            setHoverState({
+              id,
+              source,
+              rect: e.currentTarget.getBoundingClientRect()
+            });
+          };
+
+          const handleMouseLeave = () => {
+            hoverTimeoutRef.current = setTimeout(() => {
+              setHoverState(null);
+            }, 100);
           };
 
           const handlePointerMove = (e) => {
@@ -403,12 +636,71 @@
 
           const handlePointerUp = (e) => {
             if (!dragging) return;
-            const isBattlefield = e.clientY < window.innerHeight - 180;
+            
+            const isTap = Math.abs(e.clientX - dragging.initialMouseX) < 5 && Math.abs(e.clientY - dragging.initialMouseY) < 5;
 
-            if (dragging.source === 'hand') {
+            // Detect if the user's mouse is currently over the graveyard zone
+            const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+            const isGraveyardDrop = dropTarget?.closest('#graveyard-zone');
+            
+            const isBattlefield = e.clientY < window.innerHeight - 180 && !isGraveyardDrop;
+
+            // Handle Tap Logic: If clicked without dragging, toggle tapped state and exit
+            if (isTap && dragging.source === 'board') {
+              if (dragging.id === 2) {
+                setShowResumeModal(true);
+              }
+              setBoardCards(prev => prev.map(c => c.id === dragging.id ? { ...c, tapped: !c.tapped } : c));
+              setDragging(null);
+              return;
+            }
+
+            if (isGraveyardDrop && dragging.id !== COMMANDER_CARD.id) {
+              // 1. Explicitly drop card into graveyard
+              if (dragging.source === 'hand') {
+                setHandIds(prev => prev.filter(i => i !== dragging.id));
+              } else if (dragging.source === 'board') {
+                setBoardCards(prev => prev.filter(c => c.id !== dragging.id));
+              }
+              // Add to top of graveyard stack
+              setGraveyardIds(prev => [...prev, dragging.id]);
+            } else if (dragging.source === 'hand') {
               if (isBattlefield) {
                 setHandIds(prev => prev.filter(i => i !== dragging.id));
-                setBoardCards(prev => [...prev, { id: dragging.id, x: dragging.x, y: dragging.y }]);
+                const cardData = CARDS.find(c => c.id === dragging.id);
+                
+                if (cardData && cardData.id === 3 && !hasDrawnOrianna) {
+                    setHasDrawnOrianna(true);
+                    setHandIds(prev => [...prev.filter(i => i !== dragging.id), 8]);
+                    setLibraryCount(prev => prev - 1);
+                }
+                
+                if (cardData && cardData.id === 8 && !hasPlayedOrianna) {
+                    setHasPlayedOrianna(true);
+                    setHandIds(prev => [...prev.filter(i => i !== dragging.id), 21]); // Orianna ETB draws Regrowth!
+                    setLibraryCount(prev => prev - 1);
+                }
+
+                if (cardData && cardData.id === 21) {
+                    if (graveyardIds.length > 0) {
+                        const recoveredId = graveyardIds[graveyardIds.length - 1]; // Top card of grave
+                        setGraveyardIds(prev => prev.slice(0, -1)); // Remove it from grave
+                        setHandIds(prev => [...prev.filter(i => i !== dragging.id), recoveredId]); // Put it in hand
+                    }
+                }
+
+                if (cardData && cardData.id === 9 && !hasPlayedHobbies) {
+                    setHasPlayedHobbies(true);
+                    setLife(prev => prev - 2);
+                    setLifeFlash(true);
+                    setTimeout(() => setLifeFlash(false), 500);
+                }
+
+                if (cardData && (cardData.type.includes("Sorcery") || cardData.type.includes("Instant"))) {
+                    setGraveyardIds(prev => [...prev, dragging.id]);
+                } else {
+                    setBoardCards(prev => [...prev, { id: dragging.id, x: dragging.x, y: dragging.y, tapped: false }]);
+                }
               }
             } else if (dragging.source === 'board') {
               if (isBattlefield) {
@@ -427,13 +719,45 @@
             setDragging(null);
           };
 
-          const handleBoardClick = () => {
-            setActiveCardId(null);
+          const isPreviewVisible = hoverState && !dragging;
+          const previewCard = hoverState ? (hoverState.id === COMMANDER_CARD.id ? COMMANDER_CARD : CARDS.find(c => c.id === hoverState.id)) : null;
+          const draggedCardInfo = dragging?.id === COMMANDER_CARD.id ? COMMANDER_CARD : CARDS.find(c => c.id === dragging?.id);
+
+          let previewStyle = {
+            opacity: isPreviewVisible ? 1 : 0,
+            pointerEvents: isPreviewVisible ? 'auto' : 'none',
+            position: 'fixed',
+            zIndex: 100,
+            transition: 'opacity 0.2s ease-in-out'
           };
 
-          const previewId = hoveredCardId || activeCardId;
-          const previewCard = previewId === COMMANDER_CARD.id ? COMMANDER_CARD : CARDS.find(c => c.id === previewId);
-          const draggedCardInfo = dragging?.id === COMMANDER_CARD.id ? COMMANDER_CARD : CARDS.find(c => c.id === dragging?.id);
+          if (hoverState && isPreviewVisible) {
+            const { rect, source } = hoverState;
+            const previewWidth = 320; 
+            const previewHeight = 448; 
+
+            if (source === 'hand') {
+              const cardCenterX = rect.left + rect.width / 2;
+              const safeLeft = Math.max(previewWidth / 2 + 10, Math.min(cardCenterX, window.innerWidth - previewWidth / 2 - 10));
+              previewStyle.left = safeLeft;
+              previewStyle.bottom = window.innerHeight - rect.top + 10;
+              previewStyle.transform = 'translate(-50%, 0)';
+            } else {
+              const spaceRight = window.innerWidth - rect.right;
+              const spaceLeft = rect.left;
+
+              if (spaceRight >= spaceLeft) {
+                previewStyle.left = Math.min(rect.right + 20, window.innerWidth - previewWidth - 10);
+              } else {
+                previewStyle.left = Math.max(10, rect.left - previewWidth - 20);
+              }
+
+              const cardCenterY = rect.top + rect.height / 2;
+              let topPos = cardCenterY - previewHeight / 2;
+              topPos = Math.max(10, Math.min(topPos, window.innerHeight - previewHeight - 10));
+              previewStyle.top = topPos;
+            }
+          }
 
           return (
             <div 
@@ -441,9 +765,14 @@
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerLeave={handlePointerUp}
-              onClick={handleBoardClick}
             >
-              <div className={`fixed left-4 md:left-8 top-1/2 -translate-y-1/2 z-[100] transition-all duration-300 pointer-events-none ${previewCard ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-95 -translate-x-10'}`}>
+              <div 
+                style={previewStyle}
+                onMouseEnter={() => {
+                  if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+                }}
+                onMouseLeave={handleMouseLeave}
+              >
                  {previewCard && <MTGCardPreview card={previewCard} />}
               </div>
 
@@ -474,8 +803,8 @@
                            card={COMMANDER_CARD}
                            isDragging={dragging?.id === COMMANDER_CARD.id}
                            onPointerDown={handlePointerDown}
-                           onMouseEnter={() => setHoveredCardId(COMMANDER_CARD.id)}
-                           onMouseLeave={() => setHoveredCardId(null)}
+                           onMouseEnter={handleMouseEnter}
+                           onMouseLeave={handleMouseLeave}
                          />
                        ) : (
                          <div className="w-20 sm:w-24 md:w-28 aspect-[2.5/3.5] border-2 border-transparent border-dashed rounded-lg opacity-30 flex items-center justify-center pointer-events-none">
@@ -494,10 +823,11 @@
                         card={cardData}
                         x={bc.x}
                         y={bc.y}
+                        isTapped={bc.tapped}
                         isDragging={dragging?.id === bc.id}
                         onPointerDown={handlePointerDown}
-                        onMouseEnter={() => setHoveredCardId(bc.id)}
-                        onMouseLeave={() => setHoveredCardId(null)}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                       />
                     );
                  })}
@@ -509,51 +839,53 @@
                       y={commanderState.y}
                       isDragging={dragging?.id === COMMANDER_CARD.id}
                       onPointerDown={handlePointerDown}
-                      onMouseEnter={() => setHoveredCardId(COMMANDER_CARD.id)}
-                      onMouseLeave={() => setHoveredCardId(null)}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
                     />
                  )}
 
-                 <div className="absolute right-4 top-4 z-20 w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] group pointer-events-auto cursor-pointer">
-                    <div id="visual-deck" className="relative w-full h-full group-hover:-translate-y-1 transition-transform duration-300 ease-out origin-center">
-                      {[0, 1, 2, 3, 4].map(i => (
-                         <div key={i} className="absolute inset-0 bg-[#000000] rounded-[12px] shadow-[2px_2px_8px_rgba(0,0,0,0.8)] overflow-hidden" style={{ transform: `translate(${i * 1.5}px, -${i * 1.5}px)` }}>
-                              <div className="absolute inset-[3px] md:inset-[4px] rounded-lg bg-[#3a2820] overflow-hidden">
-                                <div className="absolute inset-0 opacity-40 mix-blend-multiply" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#593c28] via-[#2f1f18] to-[#1c120e] opacity-60" />
-                                <div className="absolute inset-[8%] md:inset-[10%] rounded-full border-2 md:border-[3px] border-[#9c6b41] bg-[#1a1210] shadow-[inset_0_0_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden">
-                                   <div className="absolute inset-0 bg-gradient-to-b from-[#2a2438] via-[#1f1b2b] to-[#15121c]" />
-                                   <div className="relative z-10 w-full text-center mt-2 md:mt-4">
-                                     <span className="font-serif font-black text-[#3176b3] text-[10px] sm:text-[14px] md:text-[20px] tracking-widest drop-shadow-[0_1px_1px_rgba(0,0,0,1)]" style={{ WebkitTextStroke: '0.5px #111', letterSpacing: '0.1em', transform: 'scaleY(1.2)', display: 'inline-block' }}>MAGIC</span>
-                                   </div>
-                                   <div className="relative w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 my-1 md:my-2 z-10 flex items-center justify-center">
-                                     <div className="absolute top-[5%] left-1/2 -translate-x-1/2 w-[22%] h-[22%] rounded-full bg-gradient-to-br from-[#f8f6d8] to-[#c4c0a5]"></div>
-                                     <div className="absolute top-[32%] right-[5%] w-[22%] h-[22%] rounded-full bg-gradient-to-br from-[#aae0fa] to-[#4581a6]"></div>
-                                     <div className="absolute bottom-[10%] right-[15%] w-[22%] h-[22%] rounded-full bg-gradient-to-br from-[#807a78] to-[#262423]"></div>
-                                     <div className="absolute bottom-[10%] left-[15%] w-[22%] h-[22%] rounded-full bg-gradient-to-br from-[#f9aa8f] to-[#c63a23]"></div>
-                                     <div className="absolute top-[32%] left-[5%] w-[22%] h-[22%] rounded-full bg-gradient-to-br from-[#9bd3ae] to-[#31774c]"></div>
-                                   </div>
-                                   <div className="relative z-10 w-full text-center mb-2 md:mb-4">
-                                     <span className="font-serif font-bold text-[#d19c36] text-[5px] sm:text-[7px] md:text-[9px] tracking-widest drop-shadow-[0_1px_1px_rgba(0,0,0,1)]">The Gathering</span>
-                                   </div>
-                                </div>
-                                <div className="absolute bottom-1 md:bottom-2 left-0 w-full text-center">
-                                   <span className="text-[5px] sm:text-[6px] md:text-[8px] font-sans text-stone-300/80 font-black tracking-[0.2em] uppercase">Deckmaster</span>
-                                </div>
-                              </div>
-                         </div>
-                      ))}
+                 <div className="absolute right-4 top-4 z-20 flex flex-col gap-10 md:gap-14 items-center pointer-events-none">
+                    <div className="w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] group pointer-events-auto cursor-pointer relative">
+                      <div id="visual-deck" className="relative w-full h-full group-hover:-translate-y-1 transition-transform duration-300 ease-out origin-center">
+                        {[0, 1, 2, 3, 4].map(i => (
+                          <div key={i} className="absolute inset-0 bg-[#000000] rounded-[6px] md:rounded-[12px] shadow-[2px_2px_8px_rgba(0,0,0,0.8)] overflow-hidden" style={{ transform: `translate(${i * 1.5}px, -${i * 1.5}px)` }}>
+                               <img src="back.jpg" alt="Magic Card Back" className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="absolute -bottom-6 md:-bottom-8 left-1/2 -translate-x-1/2 bg-black/90 px-3 py-1 rounded border border-stone-700 text-[9px] md:text-[11px] text-stone-300 font-sans tracking-widest uppercase shadow-lg text-center whitespace-nowrap">
+                        Library ({libraryCount})
+                      </div>
                     </div>
-                    <div className="absolute -bottom-6 md:-bottom-8 left-1/2 -translate-x-1/2 bg-black/90 px-3 py-1 rounded border border-stone-700 text-[9px] md:text-[11px] text-stone-300 font-sans tracking-widest uppercase shadow-lg text-center whitespace-nowrap">
-                      Library (84)
+
+                    <div id="graveyard-zone" className="w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] pointer-events-auto relative group">
+                      <div className="w-full h-full border-2 border-dashed border-stone-600 bg-black/40 backdrop-blur-sm rounded-xl p-1 flex flex-col items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)] transition-colors hover:border-stone-400">
+                        {graveyardIds.length === 0 ? (
+                          <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold drop-shadow-md text-center">Graveyard</div>
+                        ) : (
+                          <div 
+                            className="w-full h-full relative"
+                            onMouseEnter={(e) => handleMouseEnter(e, graveyardIds[graveyardIds.length - 1], 'graveyard')}
+                            onMouseLeave={handleMouseLeave}
+                          >
+                            <CardFace card={CARDS.find(c => c.id === graveyardIds[graveyardIds.length - 1])} />
+                            <div className="absolute -inset-1 border-2 border-transparent group-hover:border-stone-400/50 rounded-[10px] pointer-events-none transition-colors" />
+                          </div>
+                        )}
+                      </div>
+                      {graveyardIds.length > 0 && (
+                        <div className="absolute -bottom-6 md:-bottom-8 left-1/2 -translate-x-1/2 bg-black/90 px-3 py-1 rounded border border-stone-700 text-[9px] md:text-[11px] text-stone-300 font-sans tracking-widest uppercase shadow-lg text-center whitespace-nowrap">
+                          Graveyard ({graveyardIds.length})
+                        </div>
+                      )}
                     </div>
                  </div>
               </div>
 
               <div className="h-32 md:h-48 relative z-30 w-full border-t border-stone-800 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center pb-2 md:pb-6 pointer-events-none">
-                <div className="absolute left-4 bottom-4 bg-stone-800 border border-stone-600 rounded p-2 text-center shadow-lg hidden sm:block pointer-events-auto">
+                <div className="absolute left-4 bottom-4 bg-stone-800 border border-stone-600 rounded p-2 text-center shadow-lg hidden sm:block pointer-events-auto transition-all">
                    <div className="text-[10px] font-sans text-stone-400 uppercase tracking-widest">Life</div>
-                   <div className="text-2xl font-bold text-white leading-none">40</div>
+                   <div className={`text-2xl font-bold leading-none transition-colors duration-500 ${life < 40 ? 'text-red-500' : 'text-white'}`}>{life}</div>
                 </div>
 
                 <div className="relative flex justify-center w-full max-w-4xl mx-auto perspective-[1200px] pointer-events-auto">
@@ -567,13 +899,31 @@
                         total={handIds.length}
                         isDragging={dragging?.id === card.id}
                         onPointerDown={handlePointerDown}
-                        onMouseEnter={() => setHoveredCardId(card.id)}
-                        onMouseLeave={() => setHoveredCardId(null)}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                       />
                     );
                   })}
                 </div>
               </div>
+              
+              {showResumeModal && (
+                <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-8" onPointerDown={() => setShowResumeModal(false)}>
+                  <div className="relative w-full max-w-4xl h-[85vh] bg-stone-900 border-[6px] border-[#c0c0c0] rounded-xl shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col overflow-hidden animate-[pulse_0.5s_ease-out_1]" onPointerDown={e => e.stopPropagation()}>
+                    <div className="bg-gradient-to-r from-red-800 to-red-600 p-3 border-b-4 border-black flex justify-between items-center shadow-lg relative z-10">
+                      <h2 className="text-white font-serif font-bold text-lg md:text-xl tracking-wider flex items-center gap-2 drop-shadow-md">
+                         <IconBriefcase size={24} /> The Resume
+                      </h2>
+                      <button className="text-white hover:bg-white/20 hover:text-red-100 font-sans font-bold px-4 py-1.5 bg-black/40 rounded border border-black/50 transition-colors shadow-inner" onClick={() => setShowResumeModal(false)}>
+                        Close [X]
+                      </button>
+                    </div>
+                    <div className="flex-1 w-full overflow-auto bg-stone-300 p-4">
+                       <img src="Rosie_Choi.png" alt="Rosie Choi Resume" className="w-full md:w-[850px] max-w-none h-auto shadow-2xl border border-stone-400 block mx-auto" />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         }
