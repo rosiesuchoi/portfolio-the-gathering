@@ -5,7 +5,7 @@ import CommandZoneCard from './CommandZoneCard.jsx';
 export default function CommandZone({ card, inZone, isDragging, onPointerDown, onMouseEnter, onMouseLeave }) {
   return (
     <div className="absolute top-4 left-4 z-20 pointer-events-auto">
-      <div className="border-2 border-dashed border-[#D4AF37]/60 bg-black/70 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center justify-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)] transition-colors hover:border-[#D4AF37]/90 min-w-[100px] sm:min-w-[120px] md:min-w-[140px] min-h-[160px] md:min-h-[200px]">
+      <div className="border-2 border-dashed border-[#D4AF37]/60 bg-black/70 backdrop-blur-sm rounded-xl p-3 flex flex-col items-center justify-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)] transition-colors hover:border-[#D4AF37]/90 min-w-[100px] sm:min-w-[120px] md:min-w-[140px] min-h-[160px] md:min-h-[200px]" style={{ transform: 'perspective(800px) rotateX(calc(var(--my, 0) * -4deg)) rotateY(calc(var(--mx, 0) * 4deg))' }}>
         <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold mb-3 drop-shadow-md">Command Zone</div>
         {inZone ? (
           <CommandZoneCard

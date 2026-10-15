@@ -6,6 +6,7 @@ import {
   createInitialGameState,
   getBattlefieldStats,
   isBattlefieldPosition,
+  isInstantOrSorcery,
   moveBoardCard,
   moveCommander,
   relayoutStartingBoard,
@@ -22,11 +23,13 @@ import {
   describeStackItem,
   resolveTopOfStack,
 } from '../models/stackModel.js';
+import { examineProject, getProject } from '../models/projects.js';
 import { DEFAULT_THEME_ID } from '../models/themes.js';
 import { GRAVEYARD_ZONE_ID } from '../constants.js';
-import { cannotPayHint, jodahFoundNothingHint, manaSpentHint } from './hints.js';
+import { cannotPayHint, examineHint, jodahFoundNothingHint, manaSpentHint } from './hints.js';
 import { useHoverPreview } from './useHoverPreview.js';
 import { useContactForm } from './useContactForm.js';
+import { useMouseParallax } from './useMouseParallax.js';
 
 const TAP_MOVEMENT_THRESHOLD_PX = 5;
 
@@ -44,9 +47,12 @@ export function useGameController() {
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [hint, setHint] = useState(null);
   const [activeTheme, setActiveTheme] = useState(DEFAULT_THEME_ID);
+  // Card id of the project artifact whose details modal is open (null when closed).
+  const [projectCardId, setProjectCardId] = useState(null);
 
   const hover = useHoverPreview();
   const contactForm = useContactForm();
+  const parallaxRef = useMouseParallax();
 
   // Until the player touches a card, keep the opening board (Omniscience + lands) laid out
   // for the current window size, so every land is visible even if the window is resized.
@@ -115,10 +121,25 @@ export function useGameController() {
     const isGraveyardDrop = Boolean(dropTarget?.closest(`#${GRAVEYARD_ZONE_ID}`));
     const isBattlefield = isBattlefieldPosition(e.clientY, window.innerHeight) && !isGraveyardDrop;
 
-    // A click without dragging taps the card: lands add/remove mana, The Resume opens the resume.
+    // A click without dragging taps the card: lands add/remove mana, The Resume opens the resume,
+    // project artifacts run their "Examine" ability.
     if (isTap && source === 'board') {
       if (id === CARD_IDS.RESUME) setShowResumeModal(true);
-      const { state, result } = tapCard(game, id);
+
+      let current = game;
+      if (getProject(id)) {
+        const examined = examineProject(game, id);
+        if (!examined.ok) {
+          setHint(examineHint(examined));
+          setDragging(null);
+          return;
+        }
+        current = examined.state;
+        setHint(null);
+        setProjectCardId(id);
+      }
+
+      const { state, result } = tapCard(current, id);
       setGame(state);
       if (result === TAP_RESULT.MANA_SPENT) setHint(manaSpentHint());
       setDragging(null);
@@ -143,6 +164,22 @@ export function useGameController() {
     }
 
     setDragging(null);
+  };
+
+  /**
+   * Click on the top card of the graveyard. Spells that are project artifacts (Portfolio Site)
+   * have a graveyard version of the Examine ability, since they can't be tapped on the battlefield.
+   */
+  const handleGraveyardActivate = (cardId) => {
+    if (!getProject(cardId) || !isInstantOrSorcery(getCardById(cardId))) return;
+    const examined = examineProject(game, cardId);
+    if (!examined.ok) {
+      setHint(examineHint(examined));
+      return;
+    }
+    setGame(examined.state);
+    setHint(null);
+    setProjectCardId(cardId);
   };
 
   /** "Resolve" button: pop the top of the stack and execute it. */
@@ -171,6 +208,9 @@ export function useGameController() {
     life: game.life,
     libraryCount: game.libraryCount,
     buffedIds: game.buffedIds,
+    unlockedProjectIds: game.unlockedProjectIds,
+    handleGraveyardActivate,
+    parallaxRef,
     getStats: (cardId) => getBattlefieldStats(game, cardId),
     handleNewTurn: () => { setGame(startNewTurn(game)); setHint(null); },
 
@@ -197,6 +237,8 @@ export function useGameController() {
     showResumeModal,
     showContactScreen,
     showHowToPlay,
+    projectCardId,
+    closeProject: () => setProjectCardId(null),
     closeResumeModal: () => setShowResumeModal(false),
     closeContactScreen: () => setShowContactScreen(false),
     openHowToPlay: () => setShowHowToPlay(true),

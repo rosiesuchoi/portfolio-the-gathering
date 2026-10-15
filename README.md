@@ -150,19 +150,21 @@ src/
     gameModel.js              Initial state, queries and zone transitions (tap, graveyard, move, ...)
     stackModel.js             The Stack: cast (pay mana), resolve (LIFO), triggers, stack item descriptions
     manaModel.js              Mana pool and mana cost parsing/payment
+    projects.js               Project artifact data (links, stack, description) + Examine ability
     themes.js                 WUBRG background theme definitions
   controllers/              React hooks that turn user input into model transitions
     useGameController.js      Drag & drop, tapping, drops -> model; exposes state to the view
     useHoverPreview.js        Hover/preview tracking with hide delay
     useContactForm.js         Contact form submission status
+    useMouseParallax.js       Publishes mouse position as --mx/--my CSS variables
     hints.js                  Copy for the pop-up hints
   services/
     contactService.js         formsubmit.co network call
   views/                    Presentational components (props in, JSX out)
     pages/GameBoardView.jsx   Full game layout
-    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, StackPanel, ManaPool, HintPopup,
+    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, StackPanel, ManaPool, HintPopup, HandCursor,
                               ThemeSwitcher, ThemeBackground, TopBar, ...
-    modals/                   ResumeModal, ContactModal, HowToPlayModal
+    modals/                   ResumeModal, ContactModal, HowToPlayModal, ProjectModal
     icons/Icons.jsx           SVG icons + key -> icon registry
     utils/previewPosition.js  Hover preview placement
 ```
@@ -195,3 +197,15 @@ The five mana buttons in the top-left switch the background theme (Plains, Islan
 16. Mana pool, casting costs and Jodah's triggers
 
 Clicking a land on the battlefield taps it and adds one mana of its color to the mana pool; clicking it again un-taps it and removes that mana (not allowed once the mana has been spent; "New Turn" untaps everything and empties the pool). Omniscience makes spells cast from the hand free, but the commander is cast from the Command Zone so it costs W U B R G; if the pool can't pay, a hint popup explains what to do with a live checklist. Rosie Choi (Jodah) now applies its +X/+X to legendary creatures (counting itself) as a live power/toughness badge, and casting a legendary spell from the hand while it is out puts Jodah's exile trigger on the Stack. Cards now move with no animation delay (board cards no longer ease into place, and cards drawn into the hand are instantly interactable), and the opening board re-lays out on window resize until the first card is touched.
+
+17. Animated hand cursor
+
+The native mouse pointer is replaced (for mouse/pen input) by a hand that points with its index finger, tilts slightly as the mouse moves, and pinches while a card is held; it returns to pointing on release. Text fields keep the normal I-beam, and touch devices are unaffected.
+
+18. Project artifacts: Examine ability
+
+The five Artifact cards are projects. Each has an ability costing one mana of a specific color (Portfolio Site U, EV Optimizer R, Board State Analyzer B, Document Organizer W, K-Beauty Matcher G): tap a land of that color, then click the artifact to pay and open its project page (site mock, stack, description, links). After the first time it can be reopened for free. Portfolio Site is a Sorcery, so its version works by clicking it in the graveyard. Edit `src/models/projects.js` to add each project's `liveUrl`, `repoUrl`, `screenshot` (a path under `public/`), `stack` and `details`; the mock becomes a clickable link to the live site once `liveUrl` is set.
+
+19. 3D parallax
+
+`useMouseParallax` publishes the mouse position as `--mx` / `--my` CSS variables on the app root. The background layers and light blobs drift at different depths, battlefield cards, the hand, the command zone and the library pile tilt toward the mouse, the hover preview has a moving glare, and the project mock tilts in 3D. All of it is disabled when the user prefers reduced motion.

@@ -21,7 +21,9 @@ export const CARD_IDS = {
   COMMANDER: COMMANDER_CARD.id,
   RESUME: 2,
   PORTFOLIO_SITE: 3,
+  EV_OPTIMIZER: 4,
   BOARD_STATE_ANALYZER: 5,
+  DOCUMENT_ORGANIZER: 6,
   K_BEAUTY_MATCHER: 7,
   ORIANNA: 8,
   HOBBIES: 9,
@@ -57,7 +59,7 @@ const SPELLS = [
     manaColor: "bg-gradient-to-br from-blue-500 to-red-500 text-white",
     stats: "",
     flavor: "Artifact 1. An interactive, TCG-style React portfolio built to showcase quarter projects.",
-    effect: "Draw a card. Reveal your hand to the opponent. They must acknowledge your superior UI/UX design skills."
+    effect: "Draw a card. Reveal your hand to the opponent. They must acknowledge your superior UI/UX design skills.\n\nGraveyard — Pay {U}: Examine this artifact. (Click it in the Graveyard to see the project.)"
   },
   {
     id: 4,
@@ -71,7 +73,7 @@ const SPELLS = [
     manaColor: "bg-stone-400 text-slate-800",
     stats: "4/4",
     flavor: "Artifact 2. A web tool to calculate real-world battery range and optimize charging schedules for an AWD electric vehicle.",
-    effect: "Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)"
+    effect: "Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)\n\n{T}, Pay {R}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {
     id: 5,
@@ -85,7 +87,7 @@ const SPELLS = [
     manaColor: "bg-gradient-to-r from-amber-200 via-purple-300 to-red-300 text-slate-900",
     stats: "",
     flavor: "Artifact 3. An AI-powered tool for Magic: The Gathering that evaluates complex board states and suggests optimal plays or powerful synergies.",
-    effect: "If Rosie Choi and The Resume are on the battlefield alongside this card, your Portfolio Site might just yield the ultimate synergy."
+    effect: "If Rosie Choi and The Resume are on the battlefield alongside this card, your Portfolio Site might just yield the ultimate synergy.\n\n{T}, Pay {B}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {
     id: 6,
@@ -99,7 +101,7 @@ const SPELLS = [
     manaColor: "bg-amber-100 text-slate-800",
     stats: "",
     flavor: "Artifact 4. A streamlined, highly accessible web interface to help elderly family members track and organize tax forms and wire transfer receipts.",
-    effect: "T: Add one mana of any color. Spend this mana only to cast accessibility spells."
+    effect: "T: Add one mana of any color. Spend this mana only to cast accessibility spells.\n\n{T}, Pay {W}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {
     id: 7,
@@ -113,7 +115,7 @@ const SPELLS = [
     manaColor: "bg-green-200 text-green-900",
     stats: "",
     flavor: "Artifact 5. A computer vision tool that analyzes skin undertones to recommend accurate base foundation matches across brands.",
-    effect: "Whenever a creature enters the battlefield under your control, put a +1/+1 counter on it and it gains hexproof until end of turn."
+    effect: "Whenever a creature enters the battlefield under your control, put a +1/+1 counter on it and it gains hexproof until end of turn.\n\n{T}, Pay {G}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {
     id: 8,

@@ -14,6 +14,8 @@ export default function MTGCardPreview({ card }) {
   const IconComp = getIcon(card.icon);
   const previewRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  // Mouse position over the card in percent, for the moving glare highlight (null = not hovering).
+  const [glare, setGlare] = useState(null);
 
   const handleMouseMove = (e) => {
     if (!previewRef.current) return;
@@ -25,10 +27,12 @@ export default function MTGCardPreview({ card }) {
       x: (y / (rect.height / 2)) * -multiplier,
       y: (x / (rect.width / 2)) * multiplier
     });
+    setGlare({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
   };
 
   const handleMouseLeave = () => {
     setTilt({ x: 0, y: 0 });
+    setGlare(null);
   };
 
   return (
@@ -47,6 +51,15 @@ export default function MTGCardPreview({ card }) {
       >
         <div className={`relative h-full w-full bg-gradient-to-br ${card.color} rounded-[12px] border-4 ${card.borderColor} flex flex-col overflow-hidden`}>
           <div className="absolute inset-0 opacity-20 mix-blend-multiply" style={{ backgroundImage: NOISE_TEXTURE }} />
+
+          {/* Glare that follows the mouse, like light catching a foil card */}
+          <div
+            className="absolute inset-0 z-20 pointer-events-none mix-blend-soft-light transition-opacity duration-200"
+            style={{
+              opacity: glare ? 1 : 0,
+              backgroundImage: glare ? `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.75), transparent 55%)` : 'none',
+            }}
+          />
 
           <div className="mx-2 mt-2 bg-gradient-to-b from-[#e3e8e3] to-[#c9d8c9] border-2 border-black/60 rounded-[4px] px-2 py-1 flex justify-between items-center shadow-md relative z-10">
             <h2 className="text-sm md:text-base font-bold text-black drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">{card.title}</h2>

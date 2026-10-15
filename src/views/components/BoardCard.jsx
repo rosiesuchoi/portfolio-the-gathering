@@ -1,9 +1,16 @@
 import React from 'react';
 import { CARD_IDS } from '../../models/cards.js';
+import { MANA_INFO } from '../../models/manaModel.js';
 import CardFace from './CardFace.jsx';
 
-/** A permanent on the battlefield. `stats` is the live power/toughness (see getBattlefieldStats). */
-export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerDown, onMouseEnter, onMouseLeave, isBuffed, stats }) {
+// 3D tilt that follows the mouse (--mx / --my are published by useMouseParallax on the app root).
+const PARALLAX_TILT = 'perspective(700px) rotateX(calc(var(--my, 0) * -5deg)) rotateY(calc(var(--mx, 0) * 5deg))';
+
+/**
+ * A permanent on the battlefield. `stats` is the live power/toughness (see getBattlefieldStats).
+ * `ability` ({ color, unlocked }) marks a project artifact with an "Examine" ability.
+ */
+export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerDown, onMouseEnter, onMouseLeave, isBuffed, stats, ability }) {
   return (
     <div
       onPointerDown={(e) => onPointerDown(e, card.id, card.id === CARD_IDS.COMMANDER ? 'commander' : 'board')}
@@ -19,7 +26,26 @@ export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerD
         </div>
       )}
 
-      <CardFace card={card} />
+      <div className="h-full w-full" style={{ transform: PARALLAX_TILT }}>
+        <CardFace card={card} />
+      </div>
+
+      {/* Project artifact ability: pay this color to examine (then it just says "Open") */}
+      {ability && (
+        <div
+          title={ability.unlocked ? 'Examined: click to reopen the project' : `Tap and pay ${MANA_INFO[ability.color].name.toLowerCase()} mana to examine this artifact`}
+          className="absolute -top-2 -left-2 z-40 pointer-events-none flex items-center gap-1 rounded-full border-2 border-black bg-stone-100 pl-0.5 pr-1.5 py-0.5 font-sans font-bold text-[8px] sm:text-[9px] md:text-[10px] text-black shadow-lg"
+        >
+          {ability.unlocked ? (
+            <span>Open ↗</span>
+          ) : (
+            <>
+              <span className={`w-3.5 h-3.5 md:w-4 md:h-4 rounded-full border flex items-center justify-center ${MANA_INFO[ability.color].className}`}>{ability.color}</span>
+              <span>Examine</span>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Live power/toughness; green when raised by Jodah or a K-Beauty counter */}
       {stats && (

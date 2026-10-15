@@ -34,7 +34,11 @@ export default function Hand({ cardIds, life, manaPool, onNewTurn, draggingId, o
         </div>
       </div>
 
-      <div className="relative flex justify-center w-full max-w-4xl mx-auto perspective-[1200px] pointer-events-auto">
+      {/* The whole hand tilts toward the mouse for a subtle 3D feel */}
+      <div
+        className="relative flex justify-center w-full max-w-4xl mx-auto pointer-events-auto"
+        style={{ transform: 'perspective(1200px) rotateX(calc(var(--my, 0) * -3deg)) rotateY(calc(var(--mx, 0) * 4deg))' }}
+      >
         {cardIds.map((cardId, index) => {
           const card = getCardById(cardId);
           return (

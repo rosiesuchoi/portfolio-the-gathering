@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* The animated hand cursor (HandCursor.jsx) replaces the native pointer for mouse users.
+   Text fields keep the native I-beam so typing stays obvious. */
+.custom-cursor,
+.custom-cursor * {
+  cursor: none !important;
+}
+.custom-cursor input,
+.custom-cursor textarea,
+.custom-cursor select {
+  cursor: text !important;
+}

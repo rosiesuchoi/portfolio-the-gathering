@@ -1,11 +1,13 @@
 import React from 'react';
 import { CARD_IDS, getCardById } from '../../models/cards.js';
 import { COMMANDER_ZONE } from '../../models/gameModel.js';
+import { getProject } from '../../models/projects.js';
 import { computePreviewStyle } from '../utils/previewPosition.js';
 import BoardCard from '../components/BoardCard.jsx';
 import CardFace from '../components/CardFace.jsx';
 import CommandZone from '../components/CommandZone.jsx';
 import Graveyard from '../components/Graveyard.jsx';
+import HandCursor from '../components/HandCursor.jsx';
 import HintPopup from '../components/HintPopup.jsx';
 import Hand from '../components/Hand.jsx';
 import Library from '../components/Library.jsx';
@@ -15,6 +17,7 @@ import ThemeBackground from '../components/ThemeBackground.jsx';
 import TopBar from '../components/TopBar.jsx';
 import ContactModal from '../modals/ContactModal.jsx';
 import HowToPlayModal from '../modals/HowToPlayModal.jsx';
+import ProjectModal from '../modals/ProjectModal.jsx';
 import ResumeModal from '../modals/ResumeModal.jsx';
 
 /** Presentational layout of the whole game; all state and handlers come from the controller. */
@@ -22,6 +25,7 @@ export default function GameBoardView({ game }) {
   const {
     handIds, boardCards, graveyardIds, commander, manaPool, life, libraryCount, buffedIds,
     getStats, handleNewTurn, hint, closeHint,
+    unlockedProjectIds, handleGraveyardActivate, parallaxRef, projectCardId, closeProject,
     stackItems, handleResolveStack,
     commanderCard, dragging, draggedCard,
     hoverState, previewCard, isPreviewVisible,
@@ -35,14 +39,22 @@ export default function GameBoardView({ game }) {
   const draggingId = dragging?.id;
   const previewStyle = computePreviewStyle(hoverState, isPreviewVisible);
 
+  // "Examine" ability marker for project artifacts on the battlefield.
+  const abilityFor = (cardId) => {
+    const project = getProject(cardId);
+    return project ? { color: project.abilityColor, unlocked: unlockedProjectIds.includes(cardId) } : null;
+  };
+
   return (
     <div
+      ref={parallaxRef}
       className="h-screen w-full bg-[#1a1c23] text-stone-200 overflow-hidden font-serif selection:bg-amber-500/30 flex flex-col relative"
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
     >
       <ThemeBackground activeTheme={activeTheme} />
+      <HandCursor isPinching={Boolean(dragging)} />
 
       <div
         style={previewStyle}
@@ -90,6 +102,7 @@ export default function GameBoardView({ game }) {
               onMouseLeave={handleMouseLeave}
               isBuffed={buffedIds.includes(bc.id)}
               stats={getStats(bc.id)}
+              ability={abilityFor(bc.id)}
             />
           );
         })}
@@ -112,6 +125,8 @@ export default function GameBoardView({ game }) {
           <Library count={libraryCount} />
           <Graveyard
             cardIds={graveyardIds}
+            unlockedProjectIds={unlockedProjectIds}
+            onActivate={handleGraveyardActivate}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           />
@@ -132,6 +147,14 @@ export default function GameBoardView({ game }) {
       />
 
       {hint && <HintPopup hint={hint} manaPool={manaPool} onClose={closeHint} />}
+
+      {projectCardId && (
+        <ProjectModal
+          card={getCardById(projectCardId)}
+          project={getProject(projectCardId)}
+          onClose={closeProject}
+        />
+      )}
 
       {showResumeModal && <ResumeModal onClose={closeResumeModal} />}
 

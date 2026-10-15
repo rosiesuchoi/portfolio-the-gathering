@@ -30,6 +30,19 @@ export const cannotPayHint = ({ card, fromHand }) => {
   };
 };
 
+/** The player tried to examine a project artifact without the mana for its ability. */
+export const examineHint = ({ card, color }) => {
+  const { name, land } = MANA_INFO[color];
+  return {
+    title: `Pay ${color} to examine ${card.title}`,
+    body:
+      `${card.title} has an ability: pay one ${name.toLowerCase()} mana to examine it and see the project behind the card. ` +
+      `Click a ${land} on the battlefield to tap it for ${name.toLowerCase()} mana, then click ${card.title} again. ` +
+      `Once examined, you can reopen it any time for free.`,
+    cost: color,
+  };
+};
+
 /** The player tried to untap a land whose mana was already spent. */
 export const manaSpentHint = () => ({
   title: 'That mana is already spent',

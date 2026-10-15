@@ -70,6 +70,17 @@ export default function HowToPlayModal({ onClose }) {
             </p>
           </Section>
 
+          <Section title="Examining my projects">
+            <p>
+              The five <strong>Artifacts</strong> are my projects. Each has an ability that needs one specific
+              color of mana: tap a land of that color (the colored badge on the card tells you which), then
+              click the artifact to <strong>pay and examine</strong> it. You'll see a preview of the site, what
+              it was built with, and a write-up. Click the preview to visit the live site when there is one.
+              Once examined, tap the artifact again to reopen it for free. <em>Portfolio Site</em> is a spell,
+              so its version of the ability works from the graveyard.
+            </p>
+          </Section>
+
           <Section title="The Stack">
             <p>
               In Magic, nothing happens instantly. A spell you play, or an ability that triggers, first waits on

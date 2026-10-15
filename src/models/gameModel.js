@@ -73,6 +73,8 @@ export const createInitialGameState = ({ width = 1200, height = 800 } = {}) => (
   nextStackId: 1,
   // Creatures that received the K-Beauty Matcher counter/hexproof trigger.
   buffedIds: [],
+  // Project artifacts whose "Examine" ability has been paid for (reopening is free).
+  unlockedProjectIds: [],
   hasDrawnOrianna: false,
   hasPlayedOrianna: false,
   hasPlayedHobbies: false,
