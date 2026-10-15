@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import CardFace from './CardFace.jsx';
 
-export default function HandCard({ card, index, total, isDragging, onPointerDown, onMouseEnter, onMouseLeave }) {
+/**
+ * `drawDelay` staggers the opening-hand "draw" animation. Cards that arrive later
+ * (drawn, returned from the battlefield) use 0 and are interactable immediately.
+ */
+export default function HandCard({ card, index, total, drawDelay = 0, isDragging, onPointerDown, onMouseEnter, onMouseLeave }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isDrawn, setIsDrawn] = useState(false);
+  const [isDrawn, setIsDrawn] = useState(drawDelay === 0);
   const [isHovering, setIsHovering] = useState(false);
 
-  // Staggered "draw" animation on mount.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsDrawn(true);
-    }, 400 + (index * 150));
+    if (drawDelay === 0) return undefined;
+    const timer = setTimeout(() => setIsDrawn(true), drawDelay);
     return () => clearTimeout(timer);
-  }, [index]);
+  }, [drawDelay]);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current || isDragging) return;
@@ -65,7 +67,7 @@ export default function HandCard({ card, index, total, isDragging, onPointerDown
     style = {
       transform: `translate(${xOffsetCSS}, ${yOffset}px) rotate(${rotation}deg)`,
       zIndex: index,
-      transition: 'transform 0.3s ease-out',
+      transition: 'transform 0.15s ease-out',
       opacity: isDragging ? 0.3 : 1
     };
   }

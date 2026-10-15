@@ -2,7 +2,8 @@
 // takes the current game state and returns a new one (never mutates).
 // Casting and resolving spells/triggers lives in stackModel.js.
 
-import { CARDS, CARD_IDS, LAND_IDS } from './cards.js';
+import { CARDS, CARD_IDS, LAND_IDS, getCardById } from './cards.js';
+import { emptyManaPool } from './manaModel.js';
 
 // Pixels at the bottom of the viewport reserved for the hand.
 export const HAND_AREA_HEIGHT = 180;
@@ -23,21 +24,40 @@ export const without = (ids, id) => ids.filter(i => i !== id);
 const startingHandIds = () =>
   CARDS.map(c => c.id).filter(id => id < CARD_IDS.OMNISCIENCE && id !== CARD_IDS.ORIANNA);
 
-/** Omniscience centered high up, the 10 basic lands fanned out in a horizontal line. */
-const startingBoard = (width, height) => {
-  const spacing = Math.min(90, (width - 200) / LAND_IDS.length);
-  const startX = (width - (spacing * (LAND_IDS.length - 1)) - 100) / 2;
+/**
+ * Starting positions: Omniscience (played last turn) centered high up and the 10 basic
+ * lands fanned out in a horizontal line. Clamped so every card stays on screen.
+ */
+const startingPositions = (width, height) => {
+  const spacing = Math.max(36, Math.min(90, (width - 200) / LAND_IDS.length));
+  const rowWidth = spacing * (LAND_IDS.length - 1) + 100;
+  const startX = Math.max(8, (width - rowWidth) / 2);
   const startY = height / 2 + 10;
 
-  return [
-    { id: CARD_IDS.OMNISCIENCE, x: width / 2 - 60, y: startY - 200, tapped: false },
-    ...LAND_IDS.map((id, index) => ({
-      id,
-      x: startX + index * spacing,
-      y: startY,
-      tapped: false,
-    })),
-  ];
+  const positions = {
+    [CARD_IDS.OMNISCIENCE]: { x: Math.max(8, width / 2 - 60), y: Math.max(80, startY - 200) },
+  };
+  LAND_IDS.forEach((id, index) => {
+    positions[id] = { x: startX + index * spacing, y: startY };
+  });
+  return positions;
+};
+
+const startingBoard = (width, height) => {
+  const positions = startingPositions(width, height);
+  return [CARD_IDS.OMNISCIENCE, ...LAND_IDS].map(id => ({ id, ...positions[id], tapped: false }));
+};
+
+/**
+ * Re-run the starting layout for the opening cards (e.g. when the window is resized
+ * before the player has touched anything). Tapped state and other cards are untouched.
+ */
+export const relayoutStartingBoard = (state, { width, height }) => {
+  const positions = startingPositions(width, height);
+  return {
+    ...state,
+    boardCards: state.boardCards.map(c => (positions[c.id] ? { ...c, ...positions[c.id] } : c)),
+  };
 };
 
 export const createInitialGameState = ({ width = 1200, height = 800 } = {}) => ({
@@ -45,6 +65,7 @@ export const createInitialGameState = ({ width = 1200, height = 800 } = {}) => (
   boardCards: startingBoard(width, height),
   graveyardIds: [],
   commander: { zone: COMMANDER_ZONE.COMMAND, x: 0, y: 0 },
+  manaPool: emptyManaPool(),
   life: STARTING_LIFE,
   libraryCount: STARTING_LIBRARY_COUNT,
   // The Stack: last item in the array is the top and resolves first (LIFO).
@@ -77,6 +98,44 @@ export const isCreature = (card) => card.type.toLowerCase().includes('creature')
 export const isInstantOrSorcery = (card) =>
   card.type.includes('Sorcery') || card.type.includes('Instant');
 
+export const isLegendary = (card) => card.type.includes('Legendary');
+
+export const isLegendaryCreature = (card) => isLegendary(card) && isCreature(card);
+
+/** Number of legendary creatures currently on the battlefield (the commander counts itself). */
+export const countLegendaryCreatures = (state) => {
+  const onBoard = state.boardCards.filter(c => isLegendaryCreature(getCardById(c.id))).length;
+  return onBoard + (isCommanderOnBattlefield(state) ? 1 : 0);
+};
+
+/**
+ * Current power/toughness of a creature on the battlefield, with continuous effects applied:
+ *  - Jodah (Rosie Choi): legendary creatures get +X/+X, X = number of legendary creatures
+ *    (it sees itself, so X is at least 1 while it is on the battlefield).
+ *  - K-Beauty Matcher: a +1/+1 counter on creatures that entered while it was out.
+ * Returns null if the card is not a creature with stats on the battlefield.
+ */
+export const getBattlefieldStats = (state, cardId) => {
+  if (!isOnBattlefield(state, cardId)) return null;
+  const card = getCardById(cardId);
+  if (!card || !isCreature(card) || !card.stats) return null;
+
+  const [basePower, baseToughness] = card.stats.split('/').map(Number);
+  const jodahBonus = isCommanderOnBattlefield(state) && isLegendaryCreature(card)
+    ? countLegendaryCreatures(state)
+    : 0;
+  const counters = state.buffedIds.includes(cardId) ? 1 : 0;
+  const bonus = jodahBonus + counters;
+
+  return {
+    label: `${basePower + bonus}/${baseToughness + bonus}`,
+    base: card.stats,
+    jodahBonus,
+    counters,
+    modified: bonus > 0,
+  };
+};
+
 /**
  * Win-condition puzzle: Commander, The Resume and Board State Analyzer are on the
  * battlefield, and Orianna has already been drawn (i.e. Regrowth was used).
@@ -99,9 +158,42 @@ export const drawCard = (state, cardId) => ({
   libraryCount: state.libraryCount - 1,
 });
 
-export const toggleTap = (state, cardId) => ({
+export const TAP_RESULT = {
+  OK: 'ok',
+  // Untapping a land whose mana was already spent isn't allowed.
+  MANA_SPENT: 'manaSpent',
+};
+
+/**
+ * Click on a battlefield card. Tapping a land adds one mana of its color to the pool;
+ * untapping it takes that mana back out. Other permanents just rotate.
+ * Returns { state, result }.
+ */
+export const tapCard = (state, cardId) => {
+  const boardCard = state.boardCards.find(c => c.id === cardId);
+  if (!boardCard) return { state, result: TAP_RESULT.OK };
+
+  const tapped = !boardCard.tapped;
+  const toggled = {
+    ...state,
+    boardCards: state.boardCards.map(c => c.id === cardId ? { ...c, tapped } : c),
+  };
+
+  const color = getCardById(cardId).produces;
+  if (!color) return { state: toggled, result: TAP_RESULT.OK };
+
+  if (tapped) {
+    return { state: { ...toggled, manaPool: { ...state.manaPool, [color]: state.manaPool[color] + 1 } }, result: TAP_RESULT.OK };
+  }
+  if (state.manaPool[color] < 1) return { state, result: TAP_RESULT.MANA_SPENT };
+  return { state: { ...toggled, manaPool: { ...state.manaPool, [color]: state.manaPool[color] - 1 } }, result: TAP_RESULT.OK };
+};
+
+/** Untap everything and empty the mana pool. */
+export const startNewTurn = (state) => ({
   ...state,
-  boardCards: state.boardCards.map(c => c.id === cardId ? { ...c, tapped: !c.tapped } : c),
+  boardCards: state.boardCards.map(c => ({ ...c, tapped: false })),
+  manaPool: emptyManaPool(),
 });
 
 /** Drop a card from the hand or battlefield onto the graveyard. */

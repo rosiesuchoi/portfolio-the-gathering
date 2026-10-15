@@ -148,17 +148,19 @@ src/
   models/                   Data + game rules (no React, no DOM)
     cards.js                  Card database (commander, spells, lands) and lookups
     gameModel.js              Initial state, queries and zone transitions (tap, graveyard, move, ...)
-    stackModel.js             The Stack: cast, resolve (LIFO), triggers, stack item descriptions
+    stackModel.js             The Stack: cast (pay mana), resolve (LIFO), triggers, stack item descriptions
+    manaModel.js              Mana pool and mana cost parsing/payment
     themes.js                 WUBRG background theme definitions
   controllers/              React hooks that turn user input into model transitions
     useGameController.js      Drag & drop, tapping, drops -> model; exposes state to the view
     useHoverPreview.js        Hover/preview tracking with hide delay
     useContactForm.js         Contact form submission status
+    hints.js                  Copy for the pop-up hints
   services/
     contactService.js         formsubmit.co network call
   views/                    Presentational components (props in, JSX out)
     pages/GameBoardView.jsx   Full game layout
-    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, StackPanel,
+    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, StackPanel, ManaPool, HintPopup,
                               ThemeSwitcher, ThemeBackground, TopBar, ...
     modals/                   ResumeModal, ContactModal, HowToPlayModal
     icons/Icons.jsx           SVG icons + key -> icon registry
@@ -189,3 +191,7 @@ A "How to Play" button in the top bar opens a modal for non-Magic players: dragg
 15. WUBRG theme switcher
 
 The five mana buttons in the top-left switch the background theme (Plains, Island, Swamp, Mountain, Forest). Each theme is a layered gradient/pattern, cross-faded for a smooth transition.
+
+16. Mana pool, casting costs and Jodah's triggers
+
+Clicking a land on the battlefield taps it and adds one mana of its color to the mana pool; clicking it again un-taps it and removes that mana (not allowed once the mana has been spent; "New Turn" untaps everything and empties the pool). Omniscience makes spells cast from the hand free, but the commander is cast from the Command Zone so it costs W U B R G; if the pool can't pay, a hint popup explains what to do with a live checklist. Rosie Choi (Jodah) now applies its +X/+X to legendary creatures (counting itself) as a live power/toughness badge, and casting a legendary spell from the hand while it is out puts Jodah's exile trigger on the Stack. Cards now move with no animation delay (board cards no longer ease into place, and cards drawn into the hand are instantly interactable), and the opening board re-lays out on window resize until the first card is touched.

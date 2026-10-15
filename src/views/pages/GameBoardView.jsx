@@ -6,6 +6,7 @@ import BoardCard from '../components/BoardCard.jsx';
 import CardFace from '../components/CardFace.jsx';
 import CommandZone from '../components/CommandZone.jsx';
 import Graveyard from '../components/Graveyard.jsx';
+import HintPopup from '../components/HintPopup.jsx';
 import Hand from '../components/Hand.jsx';
 import Library from '../components/Library.jsx';
 import MTGCardPreview from '../components/MTGCardPreview.jsx';
@@ -19,7 +20,8 @@ import ResumeModal from '../modals/ResumeModal.jsx';
 /** Presentational layout of the whole game; all state and handlers come from the controller. */
 export default function GameBoardView({ game }) {
   const {
-    handIds, boardCards, graveyardIds, commander, life, libraryCount, buffedIds,
+    handIds, boardCards, graveyardIds, commander, manaPool, life, libraryCount, buffedIds,
+    getStats, handleNewTurn, hint, closeHint,
     stackItems, handleResolveStack,
     commanderCard, dragging, draggedCard,
     hoverState, previewCard, isPreviewVisible,
@@ -87,6 +89,7 @@ export default function GameBoardView({ game }) {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               isBuffed={buffedIds.includes(bc.id)}
+              stats={getStats(bc.id)}
             />
           );
         })}
@@ -101,6 +104,7 @@ export default function GameBoardView({ game }) {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             isBuffed={buffedIds.includes(CARD_IDS.COMMANDER)}
+            stats={getStats(CARD_IDS.COMMANDER)}
           />
         )}
 
@@ -119,11 +123,15 @@ export default function GameBoardView({ game }) {
       <Hand
         cardIds={handIds}
         life={life}
+        manaPool={manaPool}
+        onNewTurn={handleNewTurn}
         draggingId={draggingId}
         onPointerDown={handlePointerDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       />
+
+      {hint && <HintPopup hint={hint} manaPool={manaPool} onClose={closeHint} />}
 
       {showResumeModal && <ResumeModal onClose={closeResumeModal} />}
 

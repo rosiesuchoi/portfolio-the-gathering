@@ -219,6 +219,8 @@ const LANDS = LAND_DEFS.map(l => ({
   manaColor: l.manaColor,
   stats: "",
   flavor: "",
+  // Mana color this land adds to the pool when tapped (W, U, B, R or G).
+  produces: l.mana,
   effect: `T: Add ${l.mana}.`
 }));
 
