@@ -132,8 +132,43 @@ Created "Version Control" (Secret Lair Regrowth - 1 G Sorcery).
 
 Updated Orianna's drop logic to add Version Control to hand.
 
-<<<<<<< HEAD
 Updated Version Control's drop logic to pop the last item off the graveyardIds array and push it into the handIds array, then put itself into the graveyard.
-=======
-Updated Version Control's drop logic to pop the last item off the graveyardIds array and push it into the handIds array, then put itself into the graveyard.
->>>>>>> 7dc98da710b3acd23f4690ff5d436baa30d7785a
+
+## Project Structure (MVC)
+
+The app is a Vite + React + Tailwind project. Code is split by MVC responsibility:
+
+```
+index.html                  Vite entry page
+public/                     Static assets (orianna.jpg, back.jpg, Rosie_Choi.png)
+src/
+  main.jsx                  Mounts <App/>
+  App.jsx                   Wires the controller to the main view
+  constants.js              DOM ids shared by views and controllers
+  models/                   Data + game rules (no React, no DOM)
+    cards.js                  Card database (commander, spells, lands) and lookups
+    gameModel.js              Initial state and pure state transitions (play, tap, graveyard, ...)
+  controllers/              React hooks that turn user input into model transitions
+    useGameController.js      Drag & drop, tapping, drops -> model; exposes state to the view
+    useHoverPreview.js        Hover/preview tracking with hide delay
+    useContactForm.js         Contact form submission status
+  services/
+    contactService.js         formsubmit.co network call
+  views/                    Presentational components (props in, JSX out)
+    pages/GameBoardView.jsx   Full game layout
+    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, ...
+    modals/                   ResumeModal, ContactModal
+    icons/Icons.jsx           SVG icons + key -> icon registry
+    utils/previewPosition.js  Hover preview placement
+```
+
+## Running
+
+Requires Node.js 18+.
+
+```bash
+npm install
+npm run dev      # development server
+npm run build    # production build into dist/
+npm run preview  # serve the production build
+```
