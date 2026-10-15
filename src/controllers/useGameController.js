@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import { CARD_IDS, COMMANDER_CARD, getCardById } from '../models/cards.js';
 import {
-  DROP_EFFECT,
+  COMMANDER_ZONE,
   createInitialGameState,
   isBattlefieldPosition,
-  isKBeautyActive,
   moveBoardCard,
-  placeCommander,
-  playFromHand,
+  moveCommander,
   returnBoardCardToHand,
   returnCommanderToZone,
   sendToGraveyard,
   toggleTap,
 } from '../models/gameModel.js';
+import {
+  RESOLVE_EFFECT,
+  castCommander,
+  castFromHand,
+  describeStackItem,
+  resolveTopOfStack,
+} from '../models/stackModel.js';
+import { DEFAULT_THEME_ID } from '../models/themes.js';
 import { GRAVEYARD_ZONE_ID } from '../constants.js';
 import { useHoverPreview } from './useHoverPreview.js';
 import { useContactForm } from './useContactForm.js';
@@ -30,6 +36,8 @@ export function useGameController() {
   const [dragging, setDragging] = useState(null);
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [showContactScreen, setShowContactScreen] = useState(false);
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [activeTheme, setActiveTheme] = useState(DEFAULT_THEME_ID);
 
   const hover = useHoverPreview();
   const contactForm = useContactForm();
@@ -90,18 +98,28 @@ export function useGameController() {
     if (isGraveyardDrop && id !== CARD_IDS.COMMANDER) {
       setGame(sendToGraveyard(game, id, source));
     } else if (source === 'hand') {
-      if (isBattlefield) {
-        const { state, effects } = playFromHand(game, id, { x, y });
-        setGame(state);
-        if (effects.includes(DROP_EFFECT.OPEN_CONTACT)) setShowContactScreen(true);
-      }
+      // Playing a card casts it: it goes on the stack and resolves later.
+      if (isBattlefield) setGame(castFromHand(game, id, { x, y }));
     } else if (source === 'board') {
       setGame(isBattlefield ? moveBoardCard(game, id, { x, y }) : returnBoardCardToHand(game, id));
     } else if (source === 'commander') {
-      setGame(isBattlefield ? placeCommander(game, { x, y }) : returnCommanderToZone(game));
+      if (!isBattlefield) {
+        setGame(returnCommanderToZone(game));
+      } else if (game.commander.zone === COMMANDER_ZONE.COMMAND) {
+        setGame(castCommander(game, { x, y }));
+      } else {
+        setGame(moveCommander(game, { x, y }));
+      }
     }
 
     setDragging(null);
+  };
+
+  /** "Resolve" button: pop the top of the stack and execute it. */
+  const handleResolveStack = () => {
+    const { state, effects } = resolveTopOfStack(game);
+    setGame(state);
+    if (effects.includes(RESOLVE_EFFECT.OPEN_CONTACT)) setShowContactScreen(true);
   };
 
   return {
@@ -112,7 +130,11 @@ export function useGameController() {
     commander: game.commander,
     life: game.life,
     libraryCount: game.libraryCount,
-    isKBeautyActive: isKBeautyActive(game),
+    buffedIds: game.buffedIds,
+
+    // the stack, described for display, top item first
+    stackItems: game.stack.map(describeStackItem).reverse(),
+    handleResolveStack,
 
     // drag state
     dragging,
@@ -123,11 +145,18 @@ export function useGameController() {
     previewCard: hover.hoverState ? getCardById(hover.hoverState.id) : null,
     isPreviewVisible: Boolean(hover.hoverState) && !dragging,
 
+    // theme
+    activeTheme,
+    setActiveTheme,
+
     // modals + contact form
     showResumeModal,
     showContactScreen,
+    showHowToPlay,
     closeResumeModal: () => setShowResumeModal(false),
     closeContactScreen: () => setShowContactScreen(false),
+    openHowToPlay: () => setShowHowToPlay(true),
+    closeHowToPlay: () => setShowHowToPlay(false),
     contactForm,
 
     // event handlers

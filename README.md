@@ -147,7 +147,9 @@ src/
   constants.js              DOM ids shared by views and controllers
   models/                   Data + game rules (no React, no DOM)
     cards.js                  Card database (commander, spells, lands) and lookups
-    gameModel.js              Initial state and pure state transitions (play, tap, graveyard, ...)
+    gameModel.js              Initial state, queries and zone transitions (tap, graveyard, move, ...)
+    stackModel.js             The Stack: cast, resolve (LIFO), triggers, stack item descriptions
+    themes.js                 WUBRG background theme definitions
   controllers/              React hooks that turn user input into model transitions
     useGameController.js      Drag & drop, tapping, drops -> model; exposes state to the view
     useHoverPreview.js        Hover/preview tracking with hide delay
@@ -156,8 +158,9 @@ src/
     contactService.js         formsubmit.co network call
   views/                    Presentational components (props in, JSX out)
     pages/GameBoardView.jsx   Full game layout
-    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, ...
-    modals/                   ResumeModal, ContactModal
+    components/               CardFace, BoardCard, HandCard, Hand, Library, Graveyard, StackPanel,
+                              ThemeSwitcher, ThemeBackground, TopBar, ...
+    modals/                   ResumeModal, ContactModal, HowToPlayModal
     icons/Icons.jsx           SVG icons + key -> icon registry
     utils/previewPosition.js  Hover preview placement
 ```
@@ -172,3 +175,17 @@ npm run dev      # development server
 npm run build    # production build into dist/
 npm run preview  # serve the production build
 ```
+
+## Features added after the MVC refactor
+
+13. The Stack
+
+Playing a card (or casting the commander) no longer resolves instantly: it goes on the Stack (`stack` in the game state) and the Stack panel lists it. "Resolve Top Item" pops the top item (last in, first out) and runs its effect. Permanents enter the battlefield on resolution; Sorceries and Instants run their effect and go to the graveyard. Triggered abilities (Orianna's card draw, K-Beauty Matcher's buff) are put on the Stack when a creature enters, and resolve the same way. K-Beauty Matcher now buffs each creature that enters while it is on the battlefield (instead of auto-buffing every creature on the board).
+
+14. How to Play tutorial
+
+A "How to Play" button in the top bar opens a modal for non-Magic players: dragging, tapping, permanents vs. spells, the Stack, and a collapsible puzzle hint.
+
+15. WUBRG theme switcher
+
+The five mana buttons in the top-left switch the background theme (Plains, Island, Swamp, Mountain, Forest). Each theme is a layered gradient/pattern, cross-faded for a smooth transition.

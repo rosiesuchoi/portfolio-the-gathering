@@ -99,6 +99,22 @@ export const IconMail = (props) => (
   </Svg>
 );
 
+export const IconHelp = (props) => (
+  <Svg {...props}>
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+    <path d="M12 17h.01"></path>
+  </Svg>
+);
+
+export const IconLayers = (props) => (
+  <Svg {...props}>
+    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+    <polyline points="2 17 12 22 22 17"></polyline>
+    <polyline points="2 12 12 17 22 12"></polyline>
+  </Svg>
+);
+
 export const StarShooting = (props) => (
   <Svg {...props}>
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" />

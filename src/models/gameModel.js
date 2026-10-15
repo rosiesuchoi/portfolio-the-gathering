@@ -1,7 +1,8 @@
-// Game rules and state transitions. Framework-free: every function takes the
-// current game state and returns a new one (never mutates).
+// Core game state, queries and zone transitions. Framework-free: every function
+// takes the current game state and returns a new one (never mutates).
+// Casting and resolving spells/triggers lives in stackModel.js.
 
-import { CARDS, CARD_IDS, LAND_IDS, getCardById } from './cards.js';
+import { CARDS, CARD_IDS, LAND_IDS } from './cards.js';
 
 // Pixels at the bottom of the viewport reserved for the hand.
 export const HAND_AREA_HEIGHT = 180;
@@ -9,11 +10,14 @@ export const STARTING_LIFE = 40;
 // 99 cards total - 7 in hand - 11 on board.
 export const STARTING_LIBRARY_COUNT = 81;
 
-export const DROP_EFFECT = {
-  OPEN_CONTACT: 'openContact',
+// Where the commander currently is.
+export const COMMANDER_ZONE = {
+  COMMAND: 'command',
+  STACK: 'stack',
+  BATTLEFIELD: 'battlefield',
 };
 
-const without = (ids, id) => ids.filter(i => i !== id);
+export const without = (ids, id) => ids.filter(i => i !== id);
 
 /** Cards in the opening hand: ids 2-9 except Orianna (drawn later via Portfolio Site). */
 const startingHandIds = () =>
@@ -40,9 +44,14 @@ export const createInitialGameState = ({ width = 1200, height = 800 } = {}) => (
   handIds: startingHandIds(),
   boardCards: startingBoard(width, height),
   graveyardIds: [],
-  commander: { inZone: true, x: 0, y: 0 },
+  commander: { zone: COMMANDER_ZONE.COMMAND, x: 0, y: 0 },
   life: STARTING_LIFE,
   libraryCount: STARTING_LIBRARY_COUNT,
+  // The Stack: last item in the array is the top and resolves first (LIFO).
+  stack: [],
+  nextStackId: 1,
+  // Creatures that received the K-Beauty Matcher counter/hexproof trigger.
+  buffedIds: [],
   hasDrawnOrianna: false,
   hasPlayedOrianna: false,
   hasPlayedHobbies: false,
@@ -53,26 +62,42 @@ export const createInitialGameState = ({ width = 1200, height = 800 } = {}) => (
 
 export const isOnBoard = (state, cardId) => state.boardCards.some(c => c.id === cardId);
 
-/** K-Beauty Matcher on the battlefield buffs every creature. */
-export const isKBeautyActive = (state) => isOnBoard(state, CARD_IDS.K_BEAUTY_MATCHER);
+export const isCommanderOnBattlefield = (state) =>
+  state.commander.zone === COMMANDER_ZONE.BATTLEFIELD;
+
+/** True if the card is a permanent currently on the battlefield (commander included). */
+export const isOnBattlefield = (state, cardId) =>
+  cardId === CARD_IDS.COMMANDER ? isCommanderOnBattlefield(state) : isOnBoard(state, cardId);
 
 export const isBattlefieldPosition = (clientY, viewportHeight) =>
   clientY < viewportHeight - HAND_AREA_HEIGHT;
+
+export const isCreature = (card) => card.type.toLowerCase().includes('creature');
+
+export const isInstantOrSorcery = (card) =>
+  card.type.includes('Sorcery') || card.type.includes('Instant');
 
 /**
  * Win-condition puzzle: Commander, The Resume and Board State Analyzer are on the
  * battlefield, and Orianna has already been drawn (i.e. Regrowth was used).
  */
 export const isComboReady = (state) =>
-  !state.commander.inZone &&
+  isCommanderOnBattlefield(state) &&
   isOnBoard(state, CARD_IDS.RESUME) &&
   isOnBoard(state, CARD_IDS.BOARD_STATE_ANALYZER) &&
   state.hasDrawnOrianna;
 
-const isInstantOrSorcery = (card) =>
-  card.type.includes('Sorcery') || card.type.includes('Instant');
-
 // ---------- Transitions ----------
+
+/** Permanents that leave the battlefield lose their K-Beauty buff. */
+const withoutBuff = (state, cardId) => ({ ...state, buffedIds: without(state.buffedIds, cardId) });
+
+/** Draw a specific card into the hand, decrementing the library. */
+export const drawCard = (state, cardId) => ({
+  ...state,
+  handIds: [...state.handIds, cardId],
+  libraryCount: state.libraryCount - 1,
+});
 
 export const toggleTap = (state, cardId) => ({
   ...state,
@@ -80,93 +105,34 @@ export const toggleTap = (state, cardId) => ({
 });
 
 /** Drop a card from the hand or battlefield onto the graveyard. */
-export const sendToGraveyard = (state, cardId, source) => ({
-  ...state,
-  handIds: source === 'hand' ? without(state.handIds, cardId) : state.handIds,
-  boardCards: source === 'board' ? state.boardCards.filter(c => c.id !== cardId) : state.boardCards,
-  graveyardIds: [...state.graveyardIds, cardId],
-});
+export const sendToGraveyard = (state, cardId, source) =>
+  withoutBuff({
+    ...state,
+    handIds: source === 'hand' ? without(state.handIds, cardId) : state.handIds,
+    boardCards: source === 'board' ? state.boardCards.filter(c => c.id !== cardId) : state.boardCards,
+    graveyardIds: [...state.graveyardIds, cardId],
+  }, cardId);
 
 export const moveBoardCard = (state, cardId, { x, y }) => ({
   ...state,
   boardCards: state.boardCards.map(c => c.id === cardId ? { ...c, x, y } : c),
 });
 
-export const returnBoardCardToHand = (state, cardId) => ({
+export const returnBoardCardToHand = (state, cardId) =>
+  withoutBuff({
+    ...state,
+    boardCards: state.boardCards.filter(c => c.id !== cardId),
+    handIds: [...state.handIds, cardId],
+  }, cardId);
+
+/** Reposition the commander while it is already on the battlefield. */
+export const moveCommander = (state, { x, y }) => ({
   ...state,
-  boardCards: state.boardCards.filter(c => c.id !== cardId),
-  handIds: [...state.handIds, cardId],
+  commander: { zone: COMMANDER_ZONE.BATTLEFIELD, x, y },
 });
 
-export const placeCommander = (state, { x, y }) => ({
-  ...state,
-  commander: { inZone: false, x, y },
-});
-
-export const returnCommanderToZone = (state) => ({
-  ...state,
-  commander: { inZone: true, x: 0, y: 0 },
-});
-
-/** Draw a specific card into the hand, decrementing the library. */
-const drawCard = (state, cardId) => ({
-  ...state,
-  handIds: [...state.handIds, cardId],
-  libraryCount: state.libraryCount - 1,
-});
-
-/**
- * Play a card from the hand onto the battlefield at the given position,
- * resolving its on-play triggers.
- * Returns { state, effects } where effects are UI-facing side effects.
- */
-export const playFromHand = (state, cardId, position) => {
-  const card = getCardById(cardId);
-  const effects = [];
-  let next = { ...state, handIds: without(state.handIds, cardId) };
-
-  if (!card) return { state: next, effects };
-
-  if (cardId === CARD_IDS.PORTFOLIO_SITE) {
-    if (isComboReady(state) && !state.hasDrawnContact) {
-      next = drawCard({ ...next, hasDrawnContact: true }, CARD_IDS.CONTACT);
-    } else if (!state.hasDrawnOrianna) {
-      next = drawCard({ ...next, hasDrawnOrianna: true }, CARD_IDS.ORIANNA);
-    }
-  }
-
-  // Orianna ETB: draw Version Control (Regrowth).
-  if (cardId === CARD_IDS.ORIANNA && !state.hasPlayedOrianna) {
-    next = drawCard({ ...next, hasPlayedOrianna: true }, CARD_IDS.VERSION_CONTROL);
-  }
-
-  // Version Control: return the top card of the graveyard to the hand.
-  if (cardId === CARD_IDS.VERSION_CONTROL && next.graveyardIds.length > 0) {
-    const recoveredId = next.graveyardIds[next.graveyardIds.length - 1];
-    next = {
-      ...next,
-      graveyardIds: next.graveyardIds.slice(0, -1),
-      handIds: [...next.handIds, recoveredId],
-    };
-  }
-
-  // My Hobbies (Infernal Grasp): lose 2 life, only the first time.
-  if (cardId === CARD_IDS.HOBBIES && !state.hasPlayedHobbies) {
-    next = { ...next, hasPlayedHobbies: true, life: next.life - 2 };
-  }
-
-  if (cardId === CARD_IDS.CONTACT) {
-    effects.push(DROP_EFFECT.OPEN_CONTACT);
-  }
-
-  if (isInstantOrSorcery(card)) {
-    next = { ...next, graveyardIds: [...next.graveyardIds, cardId] };
-  } else {
-    next = {
-      ...next,
-      boardCards: [...next.boardCards, { id: cardId, x: position.x, y: position.y, tapped: false }],
-    };
-  }
-
-  return { state: next, effects };
-};
+export const returnCommanderToZone = (state) =>
+  withoutBuff({
+    ...state,
+    commander: { zone: COMMANDER_ZONE.COMMAND, x: 0, y: 0 },
+  }, CARD_IDS.COMMANDER);

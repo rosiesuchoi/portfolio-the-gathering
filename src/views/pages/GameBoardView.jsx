@@ -1,5 +1,6 @@
 import React from 'react';
 import { CARD_IDS, getCardById } from '../../models/cards.js';
+import { COMMANDER_ZONE } from '../../models/gameModel.js';
 import { computePreviewStyle } from '../utils/previewPosition.js';
 import BoardCard from '../components/BoardCard.jsx';
 import CardFace from '../components/CardFace.jsx';
@@ -8,17 +9,23 @@ import Graveyard from '../components/Graveyard.jsx';
 import Hand from '../components/Hand.jsx';
 import Library from '../components/Library.jsx';
 import MTGCardPreview from '../components/MTGCardPreview.jsx';
+import StackPanel from '../components/StackPanel.jsx';
+import ThemeBackground from '../components/ThemeBackground.jsx';
 import TopBar from '../components/TopBar.jsx';
 import ContactModal from '../modals/ContactModal.jsx';
+import HowToPlayModal from '../modals/HowToPlayModal.jsx';
 import ResumeModal from '../modals/ResumeModal.jsx';
 
 /** Presentational layout of the whole game; all state and handlers come from the controller. */
 export default function GameBoardView({ game }) {
   const {
-    handIds, boardCards, graveyardIds, commander, life, libraryCount, isKBeautyActive,
+    handIds, boardCards, graveyardIds, commander, life, libraryCount, buffedIds,
+    stackItems, handleResolveStack,
     commanderCard, dragging, draggedCard,
     hoverState, previewCard, isPreviewVisible,
-    showResumeModal, showContactScreen, closeResumeModal, closeContactScreen, contactForm,
+    activeTheme, setActiveTheme,
+    showResumeModal, showContactScreen, showHowToPlay,
+    closeResumeModal, closeContactScreen, openHowToPlay, closeHowToPlay, contactForm,
     handlePointerDown, handlePointerMove, handlePointerUp,
     handleMouseEnter, handleMouseLeave, cancelPreviewHide,
   } = game;
@@ -28,11 +35,13 @@ export default function GameBoardView({ game }) {
 
   return (
     <div
-      className="h-screen w-full bg-gradient-to-b from-[#1a1c23] to-[#2a2d36] text-stone-200 overflow-hidden font-serif selection:bg-amber-500/30 flex flex-col relative"
+      className="h-screen w-full bg-[#1a1c23] text-stone-200 overflow-hidden font-serif selection:bg-amber-500/30 flex flex-col relative"
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
     >
+      <ThemeBackground activeTheme={activeTheme} />
+
       <div
         style={previewStyle}
         onMouseEnter={cancelPreviewHide}
@@ -47,12 +56,16 @@ export default function GameBoardView({ game }) {
         </div>
       )}
 
-      <TopBar />
+      <TopBar
+        activeTheme={activeTheme}
+        onSelectTheme={setActiveTheme}
+        onOpenHowToPlay={openHowToPlay}
+      />
 
       <div className="flex-1 relative z-10 w-full h-full">
         <CommandZone
           card={commanderCard}
-          inZone={commander.inZone}
+          inZone={commander.zone === COMMANDER_ZONE.COMMAND}
           isDragging={draggingId === CARD_IDS.COMMANDER}
           onPointerDown={handlePointerDown}
           onMouseEnter={handleMouseEnter}
@@ -73,12 +86,12 @@ export default function GameBoardView({ game }) {
               onPointerDown={handlePointerDown}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              isKBeautyActive={isKBeautyActive}
+              isBuffed={buffedIds.includes(bc.id)}
             />
           );
         })}
 
-        {!commander.inZone && (
+        {commander.zone === COMMANDER_ZONE.BATTLEFIELD && (
           <BoardCard
             card={commanderCard}
             x={commander.x}
@@ -87,7 +100,7 @@ export default function GameBoardView({ game }) {
             onPointerDown={handlePointerDown}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            isKBeautyActive={isKBeautyActive}
+            isBuffed={buffedIds.includes(CARD_IDS.COMMANDER)}
           />
         )}
 
@@ -101,6 +114,8 @@ export default function GameBoardView({ game }) {
         </div>
       </div>
 
+      <StackPanel items={stackItems} onResolve={handleResolveStack} />
+
       <Hand
         cardIds={handIds}
         life={life}
@@ -111,6 +126,8 @@ export default function GameBoardView({ game }) {
       />
 
       {showResumeModal && <ResumeModal onClose={closeResumeModal} />}
+
+      {showHowToPlay && <HowToPlayModal onClose={closeHowToPlay} />}
 
       {showContactScreen && (
         <ContactModal

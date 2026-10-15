@@ -8,9 +8,9 @@ export default function Graveyard({ cardIds, onMouseEnter, onMouseLeave }) {
 
   return (
     <div id={GRAVEYARD_ZONE_ID} className="w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] pointer-events-auto relative group">
-      <div className="w-full h-full border-2 border-dashed border-stone-600 bg-black/40 backdrop-blur-sm rounded-xl p-1 flex flex-col items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)] transition-colors hover:border-stone-400">
+      <div className="w-full h-full border-2 border-dashed border-stone-600 bg-black/70 backdrop-blur-sm rounded-xl p-1 flex flex-col items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)] transition-colors hover:border-stone-400">
         {cardIds.length === 0 ? (
-          <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold drop-shadow-md text-center">Graveyard</div>
+          <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-stone-400 font-bold drop-shadow-md text-center">Graveyard</div>
         ) : (
           <div
             className="w-full h-full relative"

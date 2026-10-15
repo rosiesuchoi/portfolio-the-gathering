@@ -2,9 +2,7 @@ import React from 'react';
 import { CARD_IDS } from '../../models/cards.js';
 import CardFace from './CardFace.jsx';
 
-export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerDown, onMouseEnter, onMouseLeave, isKBeautyActive }) {
-  const isCreature = card.type && card.type.toLowerCase().includes('creature');
-
+export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerDown, onMouseEnter, onMouseLeave, isBuffed }) {
   return (
     <div
       onPointerDown={(e) => onPointerDown(e, card.id, card.id === CARD_IDS.COMMANDER ? 'commander' : 'board')}
@@ -13,8 +11,8 @@ export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerD
       style={{ left: x, top: y, opacity: isDragging ? 0.3 : 1, position: 'fixed' }}
       className={`w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-xl cursor-grab active:cursor-grabbing transition-all duration-300 origin-center z-20 touch-none ${isTapped ? 'rotate-90' : 'rotate-0'} ${!isDragging ? 'hover:scale-105 hover:z-30' : ''}`}
     >
-      {/* Dynamic K-Beauty Buff Bubble */}
-      {isKBeautyActive && isCreature && (
+      {/* K-Beauty Matcher buff bubble: shown once its trigger has resolved for this creature */}
+      {isBuffed && (
         <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-pink-500 text-white text-[8px] sm:text-[10px] md:text-[11px] font-bold px-2 py-0.5 sm:py-1 rounded-full shadow-lg border-2 border-white z-50 animate-bounce pointer-events-none whitespace-nowrap">
           +1/+1 🛡️ Hexproof
         </div>
