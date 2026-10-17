@@ -27,15 +27,20 @@ export const PROJECTS = {
     screenshot: null,
   },
 
-  [CARD_IDS.EV_OPTIMIZER]: {
+  [CARD_IDS.MUSE_COACH]: {
     artifactNumber: 2,
     abilityColor: 'R',
-    summary: 'A web tool to calculate real-world battery range and optimize charging schedules for an AWD electric vehicle.',
-    details: [],
-    stack: [],
-    liveUrl: null,
+    summary: 'A fitness and nutrition coaching app: pick a celebrity training style you admire and get a coach, a weekly plan and meals built around your own body.',
+    details: [
+      'The celebrity you pick only chooses your coach. Your calorie and training targets come from your own body and are kept within healthy limits.',
+      'You get a training style, a weekly plan and tips from your coach. You can log what you eat by hand, or from a photo: the AI identifies the food and estimates the amount, and the nutrition numbers come from USDA data.',
+      'A Meals section offers recipes with portions scaled to your daily calorie target, with ingredients and cooking steps.',
+      'There are two editions that share one UI: a Python server version, and an in-browser JavaScript port that runs on GitHub Pages (with a parity check to keep the math identical). Your data stays in localStorage on your own device, and your API key is only ever sent to Anthropic.',
+    ],
+    stack: ['JavaScript', 'HTML & CSS', 'Python', 'Anthropic API', 'USDA FoodData', 'localStorage'],
+    liveUrl: 'https://rosiesuchoi.github.io/MuseCoach/',
     repoUrl: null,
-    screenshot: null,
+    screenshot: 'projects/muse-coach.jpg',
   },
 
   [CARD_IDS.BOARD_STATE_ANALYZER]: {

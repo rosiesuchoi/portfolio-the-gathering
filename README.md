@@ -204,7 +204,7 @@ The native mouse pointer is replaced (for mouse/pen input) by a hand that points
 
 18. Project artifacts: Examine ability
 
-The five Artifact cards are projects. Each has an ability costing one mana of a specific color (Portfolio Site U, EV Optimizer R, Board State Analyzer B, Document Organizer W, K-Beauty Matcher G): tap a land of that color, then click the artifact to pay and open its project page (site mock, stack, description, links). After the first time it can be reopened for free. Portfolio Site is a Sorcery, so its version works by clicking it in the graveyard. Edit `src/models/projects.js` to add each project's `liveUrl`, `repoUrl`, `screenshot` (a path under `public/`), `stack` and `details`; the mock becomes a clickable link to the live site once `liveUrl` is set.
+The five Artifact cards are projects. Each has an ability costing one mana of a specific color (Portfolio Site U, Muse Coach R, Board State Analyzer B, Document Organizer W, K-Beauty Matcher G): tap a land of that color, then click the artifact to pay and open its project page (site mock, stack, description, links). After the first time it can be reopened for free. Portfolio Site is a Sorcery, so its version works by clicking it in the graveyard. Edit `src/models/projects.js` to add each project's `liveUrl`, `repoUrl`, `screenshot` (a path under `public/`), `stack` and `details`; the mock becomes a clickable link to the live site once `liveUrl` is set.
 
 19. 3D parallax
 

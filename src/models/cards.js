@@ -21,7 +21,7 @@ export const CARD_IDS = {
   COMMANDER: COMMANDER_CARD.id,
   RESUME: 2,
   PORTFOLIO_SITE: 3,
-  EV_OPTIMIZER: 4,
+  MUSE_COACH: 4,
   BOARD_STATE_ANALYZER: 5,
   DOCUMENT_ORGANIZER: 6,
   K_BEAUTY_MATCHER: 7,
@@ -63,17 +63,17 @@ const SPELLS = [
   },
   {
     id: 4,
-    title: "EV Optimizer",
-    type: "Artifact — Vehicle",
+    title: "Muse Coach",
+    type: "Artifact",
     cost: "4",
     rarity: "Common",
     icon: "activity",
     color: "from-stone-500 to-stone-700",
     borderColor: "border-[#000000]",
     manaColor: "bg-stone-400 text-slate-800",
-    stats: "4/4",
-    flavor: "Artifact 2. A web tool to calculate real-world battery range and optimize charging schedules for an AWD electric vehicle.",
-    effect: "Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)\n\n{T}, Pay {R}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
+    stats: "",
+    flavor: "Artifact 2. A fitness and nutrition coaching app: pick a celebrity training style you admire and get a coach, a weekly plan and meals built around your own body.",
+    effect: "When this artifact enters the battlefield, choose a coach. Your plan follows their style, always within healthy limits.\n\n{T}, Pay {R}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {
     id: 5,
