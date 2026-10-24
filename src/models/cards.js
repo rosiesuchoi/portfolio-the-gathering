@@ -22,7 +22,7 @@ export const CARD_IDS = {
   RESUME: 2,
   PORTFOLIO_SITE: 3,
   MUSE_COACH: 4,
-  BOARD_STATE_ANALYZER: 5,
+  RESUME_FORGE: 5,
   DOCUMENT_ORGANIZER: 6,
   K_BEAUTY_MATCHER: 7,
   ORIANNA: 8,
@@ -77,7 +77,7 @@ const SPELLS = [
   },
   {
     id: 5,
-    title: "Board State Analyzer",
+    title: "Resume Forge",
     type: "Enchantment",
     cost: "2 W U B R G",
     rarity: "Mythic",
@@ -86,7 +86,7 @@ const SPELLS = [
     borderColor: "border-[#D4AF37]",
     manaColor: "bg-gradient-to-r from-amber-200 via-purple-300 to-red-300 text-slate-900",
     stats: "",
-    flavor: "Artifact 3. An AI-powered tool for Magic: The Gathering that evaluates complex board states and suggests optimal plays or powerful synergies.",
+    flavor: "Artifact 3. Turns any resume into an ATS-optimized Jake's Resume with Google XYZ bullets, live SWE job matching and AI coaching.",
     effect: "If Rosie Choi and The Resume are on the battlefield alongside this card, your Portfolio Site might just yield the ultimate synergy.\n\n{T}, Pay {B}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {

@@ -104,7 +104,7 @@ export default function HowToPlayModal({ onClose }) {
             </summary>
             <div className="mt-2 text-sm md:text-base text-stone-800 leading-relaxed flex flex-col gap-2">
               <p>
-                Look for card synergies. Read the rules text on each card, especially <em>Board State Analyzer</em>,
+                Look for card synergies. Read the rules text on each card, especially <em>Resume Forge</em>,
                 and notice which cards mention each other.
               </p>
               <p>

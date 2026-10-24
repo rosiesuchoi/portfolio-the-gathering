@@ -43,15 +43,20 @@ export const PROJECTS = {
     screenshot: 'projects/muse-coach.jpg',
   },
 
-  [CARD_IDS.BOARD_STATE_ANALYZER]: {
+  [CARD_IDS.RESUME_FORGE]: {
     artifactNumber: 3,
     abilityColor: 'B',
-    summary: 'An AI-powered tool for Magic: The Gathering that evaluates complex board states and suggests optimal plays or powerful synergies.',
-    details: [],
-    stack: [],
-    liveUrl: null,
+    summary: "Turns any resume into an ATS-optimized Jake's Resume (LaTeX, ready for Overleaf) with Google XYZ bullets, live SWE job matching and AI coaching.",
+    details: [
+      "Drop in a resume PDF (or paste the text) in any layout, and it is read and converted into the structure of Jake's Resume, a popular single-column LaTeX template that you can open in Overleaf.",
+      'The tool walks you through five steps: upload your resume, pick a target job, get a tailored resume, browse a job board, and chat with an AI coach.',
+      "Bullets are rewritten in Google's XYZ format (accomplished X, as measured by Y, by doing Z), and the resume is checked against the target job with an ATS keyword match.",
+      'The job board matches you to live software-engineering openings, using the SimplifyJobs listings on GitHub. Your data stays in the browser and is only sent to the AI for processing.',
+    ],
+    stack: ['Next.js', 'React', 'LaTeX (Overleaf)', 'Vercel'],
+    liveUrl: 'https://resume-forge-six-pi.vercel.app/',
     repoUrl: null,
-    screenshot: null,
+    screenshot: 'projects/resume-forge.jpg',
   },
 
   [CARD_IDS.DOCUMENT_ORGANIZER]: {

@@ -139,13 +139,13 @@ export const getBattlefieldStats = (state, cardId) => {
 };
 
 /**
- * Win-condition puzzle: Commander, The Resume and Board State Analyzer are on the
+ * Win-condition puzzle: Commander, The Resume and Resume Forge are on the
  * battlefield, and Orianna has already been drawn (i.e. Regrowth was used).
  */
 export const isComboReady = (state) =>
   isCommanderOnBattlefield(state) &&
   isOnBoard(state, CARD_IDS.RESUME) &&
-  isOnBoard(state, CARD_IDS.BOARD_STATE_ANALYZER) &&
+  isOnBoard(state, CARD_IDS.RESUME_FORGE) &&
   state.hasDrawnOrianna;
 
 // ---------- Transitions ----------
