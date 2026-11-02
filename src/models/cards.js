@@ -23,7 +23,7 @@ export const CARD_IDS = {
   PORTFOLIO_SITE: 3,
   MUSE_COACH: 4,
   RESUME_FORGE: 5,
-  DOCUMENT_ORGANIZER: 6,
+  STITCH_SURVIVAL: 6,
   K_BEAUTY_MATCHER: 7,
   ORIANNA: 8,
   HOBBIES: 9,
@@ -91,17 +91,17 @@ const SPELLS = [
   },
   {
     id: 6,
-    title: "Document Organizer",
+    title: "Stitch Survival",
     type: "Artifact",
     cost: "2 W",
     rarity: "Uncommon",
-    icon: "book",
+    icon: "gamepad",
     color: "from-amber-100 to-white",
     borderColor: "border-[#718096]",
     manaColor: "bg-amber-100 text-slate-800",
     stats: "",
-    flavor: "Artifact 4. A streamlined, highly accessible web interface to help elderly family members track and organize tax forms and wire transfer receipts.",
-    effect: "T: Add one mana of any color. Spend this mana only to cast accessibility spells.\n\n{T}, Pay {W}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
+    flavor: "Artifact 4. A Roblox game built with another student in Roblox Studio, as practice for our moonshot project.",
+    effect: "Replayable. (This artifact is built to be played again and again.)\n\n{T}, Pay {W}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {
     id: 7,

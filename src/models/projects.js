@@ -1,7 +1,10 @@
 // The five "Artifact" cards are portfolio projects. This file is the single place to fill in
 // each project's details:
 //   liveUrl     - deployed site URL (string) or null while it isn't deployed
+//   liveNote    - optional short text shown instead of "coming soon" when there will be no live site
+//                 (e.g. a game that isn't a web page)
 //   repoUrl     - source repository URL or null
+//   reflection  - optional personal note shown in the modal (e.g. what was hardest)
 //   screenshot  - image path under /public (e.g. 'projects/ev-optimizer.png') or null to show a mock
 //   stack       - technologies used (array of strings)
 //   details     - longer description, one paragraph per entry
@@ -59,15 +62,23 @@ export const PROJECTS = {
     screenshot: 'projects/resume-forge.jpg',
   },
 
-  [CARD_IDS.DOCUMENT_ORGANIZER]: {
+  [CARD_IDS.STITCH_SURVIVAL]: {
     artifactNumber: 4,
     abilityColor: 'W',
-    summary: 'A streamlined, highly accessible web interface to help elderly family members track and organize tax forms and wire transfer receipts.',
-    details: [],
-    stack: [],
+    summary: 'A Roblox game built together with another student in Roblox Studio, as preparation for our moonshot project.',
+    details: [
+      'The goal was to practice building a complete game as a pair, so our group could successfully make one for the moonshot project.',
+      'My part of the work lives on the hotel-hub branch of the shared StitchSurvival repository on GitHub.',
+    ],
+    stack: ['Roblox Studio', 'Git & GitHub'],
     liveUrl: null,
-    repoUrl: null,
+    liveNote: 'Built in Roblox Studio',
+    repoUrl: 'https://github.com/matthewleepark/StitchSurvival/tree/rosie/hotel-hub',
     screenshot: null,
+    reflection:
+      'For this artifact, the hardest part about this project was really collaborating in Roblox Studio with another student. ' +
+      'The idea behind this was in preparation for the moonshot project, so that we could successfully create a game for our group members. ' +
+      'Some troubles we went through were the physics of the game and how to approach the main game mechanic so that it could be replayable.',
   },
 
   [CARD_IDS.K_BEAUTY_MATCHER]: {

@@ -12,7 +12,9 @@ function MockScreen({ card }) {
   const Icon = getIcon(card.icon);
   return (
     <div className={`relative h-full w-full bg-gradient-to-br ${card.color} p-4 flex flex-col gap-3`}>
-      <div className="flex items-center justify-between">
+      {/* Dark tint so the light placeholder bars read on pale card colors too */}
+      <div className="absolute inset-0 bg-black/35 pointer-events-none" />
+      <div className="relative flex items-center justify-between">
         <div className="h-3 w-24 rounded bg-white/70" />
         <div className="flex gap-2">
           <div className="h-2.5 w-10 rounded bg-white/50" />
@@ -20,7 +22,7 @@ function MockScreen({ card }) {
           <div className="h-2.5 w-10 rounded bg-white/50" />
         </div>
       </div>
-      <div className="flex-1 flex items-center gap-4">
+      <div className="relative flex-1 flex items-center gap-4">
         <div className="flex-1 flex flex-col gap-2">
           <div className="h-5 w-3/4 rounded bg-white/80" />
           <div className="h-3 w-full rounded bg-white/50" />
@@ -31,7 +33,7 @@ function MockScreen({ card }) {
           {Icon && <Icon size={48} className="text-white drop-shadow-lg" />}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="relative grid grid-cols-3 gap-2">
         <div className="h-10 rounded bg-black/25" />
         <div className="h-10 rounded bg-black/25" />
         <div className="h-10 rounded bg-black/25" />
@@ -71,7 +73,7 @@ function SiteMock({ card, project }) {
         <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
         <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
         <div className="ml-2 flex-1 truncate rounded bg-stone-950 px-3 py-0.5 text-[11px] text-stone-300 font-sans">
-          {project.liveUrl ? hostOf(project.liveUrl) : 'not-deployed-yet'}
+          {project.liveUrl ? hostOf(project.liveUrl) : (project.liveNote ? 'no-live-site' : 'not-deployed-yet')}
         </div>
       </div>
 
@@ -88,7 +90,7 @@ function SiteMock({ card, project }) {
             </span>
           ) : (
             <span className="rounded-full bg-black/75 px-4 py-1.5 text-xs font-bold text-amber-200 font-sans shadow-lg">
-              Live link coming soon
+              {project.liveNote ?? 'Live link coming soon'}
             </span>
           )}
         </div>
@@ -137,14 +139,16 @@ export default function ProjectModal({ card, project, onClose }) {
         className="relative w-full max-w-5xl max-h-[90vh] bg-stone-100 border-[6px] border-[#D4AF37] rounded-xl shadow-[0_0_50px_rgba(0,0,0,1)] flex flex-col overflow-hidden"
         onPointerDown={e => e.stopPropagation()}
       >
-        <div className={`bg-gradient-to-r ${card.color} p-3 border-b-4 border-black flex justify-between items-center shadow-lg`}>
-          <h2 id="project-title" className="text-white font-serif font-bold text-lg md:text-xl tracking-wider flex items-center gap-2 drop-shadow-md">
+        <div className={`relative bg-gradient-to-r ${card.color} p-3 border-b-4 border-black flex justify-between items-center shadow-lg`}>
+          {/* Dark tint so the white title stays readable even on light card colors */}
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
+          <h2 id="project-title" className="relative text-white font-serif font-bold text-lg md:text-xl tracking-wider flex items-center gap-2 drop-shadow-md">
             {Icon && <Icon size={24} />} {card.title}
             <span className="ml-2 text-xs font-sans font-bold uppercase tracking-widest bg-black/40 rounded px-2 py-0.5">Artifact {project.artifactNumber}</span>
           </h2>
           <button
             type="button"
-            className="text-white hover:bg-white/20 font-sans font-bold px-4 py-1.5 bg-black/40 rounded border border-black/50 transition-colors shadow-inner focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="relative text-white hover:bg-white/20 font-sans font-bold px-4 py-1.5 bg-black/40 rounded border border-black/50 transition-colors shadow-inner focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             onClick={onClose}
           >
             Close [X]
@@ -189,13 +193,26 @@ export default function ProjectModal({ card, project, onClose }) {
               )}
             </section>
 
+            {/* Personal note about the project, styled like a comment */}
+            {project.reflection && (
+              <section aria-label="A note from Rosie" className="rounded-xl border-2 border-amber-400 bg-amber-50 p-4 shadow-inner">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-amber-900 mb-2 flex items-center gap-2">
+                  <span aria-hidden="true">💬</span> The hardest part
+                </h3>
+                <blockquote className="text-sm md:text-base leading-relaxed text-stone-800 italic">
+                  {project.reflection}
+                </blockquote>
+                <p className="mt-2 text-xs font-bold text-amber-900">— Rosie</p>
+              </section>
+            )}
+
             <section className="flex flex-wrap gap-3 pt-1">
               {project.liveUrl ? (
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white font-bold text-sm rounded shadow transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-900">
                   Visit live site ↗
                 </a>
               ) : (
-                <span className="px-4 py-2 bg-stone-300 text-stone-600 font-bold text-sm rounded cursor-not-allowed">Not deployed yet</span>
+                <span className="px-4 py-2 bg-stone-300 text-stone-600 font-bold text-sm rounded cursor-not-allowed">{project.liveNote ?? 'Not deployed yet'}</span>
               )}
               {project.repoUrl && (
                 <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-stone-800 hover:bg-stone-900 text-white font-bold text-sm rounded shadow transition-colors flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-950">
