@@ -5,6 +5,7 @@
 //                 (e.g. a game that isn't a web page)
 //   repoUrl     - source repository URL or null
 //   reflection  - optional personal note shown in the modal (e.g. what was hardest)
+//   reflectionTitle - optional heading for the note (defaults to "The hardest part")
 //   screenshot  - image path under /public (e.g. 'projects/ev-optimizer.png') or null to show a mock
 //   stack       - technologies used (array of strings)
 //   details     - longer description, one paragraph per entry
@@ -68,17 +69,16 @@ export const PROJECTS = {
     summary: 'A Roblox game built together with another student in Roblox Studio, as preparation for our moonshot project.',
     details: [
       'The goal was to practice building a complete game as a pair, so our group could successfully make one for the moonshot project.',
-      'My part of the work lives on the hotel-hub branch of the shared StitchSurvival repository on GitHub.',
+      'You can play the current test version on Roblox.',
     ],
     stack: ['Roblox Studio', 'Git & GitHub'],
-    liveUrl: null,
-    liveNote: 'Built in Roblox Studio',
-    repoUrl: 'https://github.com/matthewleepark/StitchSurvival/tree/rosie/hotel-hub',
+    liveUrl: 'https://www.roblox.com/games/85929683455229/StitchSurvival-Test',
+    repoUrl: null,
     screenshot: null,
+    reflectionTitle: 'What I learned',
     reflection:
-      'For this artifact, the hardest part about this project was really collaborating in Roblox Studio with another student. ' +
-      'The idea behind this was in preparation for the moonshot project, so that we could successfully create a game for our group members. ' +
-      'Some troubles we went through were the physics of the game and how to approach the main game mechanic so that it could be replayable.',
+      'I learned about the difficulties of using AI for game development. A lot of the concept felt very short, and through the use of AI there wasn\'t as much life as I thought there would be. ' +
+      'In the near future, I plan on optimizing this and making sure that it\'ll be fun for everyone.',
   },
 
   [CARD_IDS.K_BEAUTY_MATCHER]: {

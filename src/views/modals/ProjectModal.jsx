@@ -197,7 +197,7 @@ export default function ProjectModal({ card, project, onClose }) {
             {project.reflection && (
               <section aria-label="A note from Rosie" className="rounded-xl border-2 border-amber-400 bg-amber-50 p-4 shadow-inner">
                 <h3 className="text-sm font-bold uppercase tracking-widest text-amber-900 mb-2 flex items-center gap-2">
-                  <span aria-hidden="true">💬</span> The hardest part
+                  <span aria-hidden="true">💬</span> {project.reflectionTitle ?? 'The hardest part'}
                 </h3>
                 <blockquote className="text-sm md:text-base leading-relaxed text-stone-800 italic">
                   {project.reflection}
