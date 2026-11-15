@@ -81,15 +81,26 @@ export const PROJECTS = {
       'In the near future, I plan on optimizing this and making sure that it\'ll be fun for everyone.',
   },
 
-  [CARD_IDS.K_BEAUTY_MATCHER]: {
+  [CARD_IDS.MTG_AT_UWT]: {
     artifactNumber: 5,
     abilityColor: 'G',
-    summary: 'A computer vision tool that analyzes skin undertones to recommend accurate base foundation matches across brands.',
-    details: [],
-    stack: [],
-    liveUrl: null,
+    summary: 'A club site where the card is the interface: a showcase for our new Commander club at UW Tacoma, where a 3D deck shuffles and deals seven cards onto a table and each card is a link to part of the club.',
+    details: [
+      'Click the deck and it shuffles and deals seven cards onto a table. Each card leads to part of the club: what it is, the Thursday and Friday game nights, who is at the table, the weekly raffle and the end-of-quarter deck giveaway, and one open card for you.',
+      'Only the flying deck is three.js. The cards on the table are ordinary HTML, so they stay sharp and work with a keyboard and a screen reader.',
+      'I built it with Claude Code in eight phases, from discovery and three design concepts through QA and deployment, approving each step before the next one started. A CLAUDE.md file held the rules and a log recorded every session.',
+      'It is live but not finished: the member cards are still placeholders, and it has not been tested on a real phone yet.',
+    ],
+    stack: ['three.js', 'HTML & CSS', 'GitHub Pages', 'Claude Code'],
+    liveUrl: 'https://rosiesuchoi.github.io/UWT_TheGathering/',
     repoUrl: null,
-    screenshot: null,
+    screenshot: 'projects/mtg-at-uwt.jpg',
+    reflection:
+      'For Artifact 5 I tried something bigger than I had built before: a showcase site for our brand new Commander club where a 3D deck shuffles and deals seven cards onto a table, and each card is a link to part of the club. ' +
+      'I worked with Claude Code in eight phases, from discovery and three design concepts through QA and deployment, and approved each step before the next one started. A CLAUDE.md file held the rules and a log recorded every session.\n\n' +
+      'The hardest part was making the 3D cards land exactly on real, clickable page elements. The fix was a hybrid: only the flying deck is three.js, and the cards on the table are ordinary HTML, so they stay sharp and work with a keyboard and screen reader. ' +
+      'QA taught me to trust measurements over guesses. One fade-in on the headline was costing phones two seconds, and the first fix I believed in turned out not to help.\n\n' +
+      'Deployment was messier than the build. I went from GitHub Pages to Vercel and back before it worked. The site is live, but not finished: the member cards are still placeholders, and it has not been tested on a real phone yet.',
   },
 };
 

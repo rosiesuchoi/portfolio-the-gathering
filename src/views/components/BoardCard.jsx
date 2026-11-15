@@ -19,7 +19,7 @@ export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerD
       style={{ left: x, top: y, opacity: isDragging ? 0.3 : 1, position: 'fixed' }}
       className={`w-20 sm:w-28 md:w-36 aspect-[2.5/3.5] rounded-xl bg-black p-1 shadow-xl cursor-grab active:cursor-grabbing transition-transform duration-150 origin-center z-20 touch-none ${isTapped ? 'rotate-90' : 'rotate-0'} ${!isDragging ? 'hover:scale-105 hover:z-30' : ''}`}
     >
-      {/* K-Beauty Matcher buff bubble: shown once its trigger has resolved for this creature */}
+      {/* MTG at UWT buff bubble: shown once its trigger has resolved for this creature */}
       {isBuffed && (
         <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-pink-500 text-white text-[8px] sm:text-[10px] md:text-[11px] font-bold px-2 py-0.5 sm:py-1 rounded-full shadow-lg border-2 border-white z-50 animate-bounce pointer-events-none whitespace-nowrap">
           +1/+1 🛡️ Hexproof
@@ -47,7 +47,7 @@ export default function BoardCard({ card, x, y, isDragging, isTapped, onPointerD
         </div>
       )}
 
-      {/* Live power/toughness; green when raised by Jodah or a K-Beauty counter */}
+      {/* Live power/toughness; green when raised by Jodah or a MTG at UWT counter */}
       {stats && (
         <div
           title={`Base ${stats.base}${stats.jodahBonus ? `, +${stats.jodahBonus}/+${stats.jodahBonus} from Jodah` : ''}${stats.counters ? ', +1/+1 counter' : ''}`}

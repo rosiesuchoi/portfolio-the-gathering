@@ -71,7 +71,7 @@ export const createInitialGameState = ({ width = 1200, height = 800 } = {}) => (
   // The Stack: last item in the array is the top and resolves first (LIFO).
   stack: [],
   nextStackId: 1,
-  // Creatures that received the K-Beauty Matcher counter/hexproof trigger.
+  // Creatures that received the MTG at UWT counter/hexproof trigger.
   buffedIds: [],
   // Project artifacts whose "Examine" ability has been paid for (reopening is free).
   unlockedProjectIds: [],
@@ -114,7 +114,7 @@ export const countLegendaryCreatures = (state) => {
  * Current power/toughness of a creature on the battlefield, with continuous effects applied:
  *  - Jodah (Rosie Choi): legendary creatures get +X/+X, X = number of legendary creatures
  *    (it sees itself, so X is at least 1 while it is on the battlefield).
- *  - K-Beauty Matcher: a +1/+1 counter on creatures that entered while it was out.
+ *  - MTG at UWT: a +1/+1 counter on creatures that entered while it was out.
  * Returns null if the card is not a creature with stats on the battlefield.
  */
 export const getBattlefieldStats = (state, cardId) => {
@@ -150,7 +150,7 @@ export const isComboReady = (state) =>
 
 // ---------- Transitions ----------
 
-/** Permanents that leave the battlefield lose their K-Beauty buff. */
+/** Permanents that leave the battlefield lose their MTG at UWT buff. */
 const withoutBuff = (state, cardId) => ({ ...state, buffedIds: without(state.buffedIds, cardId) });
 
 /** Draw a specific card into the hand, decrementing the library. */

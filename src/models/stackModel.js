@@ -23,7 +23,7 @@ export const STACK_ITEM_KIND = {
 
 export const TRIGGER_EFFECT = {
   ORIANNA_DRAW: 'oriannaDraw',
-  K_BEAUTY_BUFF: 'kBeautyBuff',
+  CLUB_BUFF: 'clubBuff',
   JODAH_EXILE: 'jodahExile',
 };
 
@@ -112,9 +112,9 @@ const enterBattlefield = (state, card, { x, y }) => {
     if (card.id === CARD_IDS.ORIANNA && !state.hasPlayedOrianna) {
       next = pushTrigger({ ...next, hasPlayedOrianna: true }, card.id, TRIGGER_EFFECT.ORIANNA_DRAW);
     }
-    // K-Beauty Matcher: buff each creature that enters while it is on the battlefield.
-    if (isOnBoard(state, CARD_IDS.K_BEAUTY_MATCHER)) {
-      next = pushTrigger(next, CARD_IDS.K_BEAUTY_MATCHER, TRIGGER_EFFECT.K_BEAUTY_BUFF, card.id);
+    // MTG at UWT: buff each creature that enters while it is on the battlefield.
+    if (isOnBoard(state, CARD_IDS.MTG_AT_UWT)) {
+      next = pushTrigger(next, CARD_IDS.MTG_AT_UWT, TRIGGER_EFFECT.CLUB_BUFF, card.id);
     }
   }
 
@@ -170,7 +170,7 @@ const resolveTrigger = (state, { effect, targetCardId }) => {
     case TRIGGER_EFFECT.ORIANNA_DRAW:
       return { state: drawCard(state, CARD_IDS.VERSION_CONTROL), effects: [] };
 
-    case TRIGGER_EFFECT.K_BEAUTY_BUFF:
+    case TRIGGER_EFFECT.CLUB_BUFF:
       // Fizzles if the creature already left the battlefield.
       if (isOnBattlefield(state, targetCardId) && !state.buffedIds.includes(targetCardId)) {
         return { state: { ...state, buffedIds: [...state.buffedIds, targetCardId] }, effects: [] };
@@ -221,7 +221,7 @@ export const describeStackItem = (item) => {
 
   let text;
   switch (item.effect) {
-    case TRIGGER_EFFECT.K_BEAUTY_BUFF:
+    case TRIGGER_EFFECT.CLUB_BUFF:
       text = `Put a +1/+1 counter on ${target.title}. It gains hexproof until end of turn.`;
       break;
     case TRIGGER_EFFECT.JODAH_EXILE:

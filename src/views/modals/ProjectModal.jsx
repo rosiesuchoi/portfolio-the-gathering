@@ -199,7 +199,7 @@ export default function ProjectModal({ card, project, onClose }) {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-amber-900 mb-2 flex items-center gap-2">
                   <span aria-hidden="true">💬</span> {project.reflectionTitle ?? 'The hardest part'}
                 </h3>
-                <blockquote className="text-sm md:text-base leading-relaxed text-stone-800 italic">
+                <blockquote className="text-sm md:text-base leading-relaxed text-stone-800 italic whitespace-pre-line">
                   {project.reflection}
                 </blockquote>
                 <p className="mt-2 text-xs font-bold text-amber-900">— Rosie</p>

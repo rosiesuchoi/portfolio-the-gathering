@@ -24,7 +24,7 @@ export const CARD_IDS = {
   MUSE_COACH: 4,
   RESUME_FORGE: 5,
   STITCH_SURVIVAL: 6,
-  K_BEAUTY_MATCHER: 7,
+  MTG_AT_UWT: 7,
   ORIANNA: 8,
   HOBBIES: 9,
   OMNISCIENCE: 10,
@@ -105,7 +105,7 @@ const SPELLS = [
   },
   {
     id: 7,
-    title: "K-Beauty Matcher",
+    title: "MTG at UWT",
     type: "Legendary Artifact",
     cost: "3 G",
     rarity: "Rare",
@@ -114,7 +114,7 @@ const SPELLS = [
     borderColor: "border-[#c0c0c0]",
     manaColor: "bg-green-200 text-green-900",
     stats: "",
-    flavor: "Artifact 5. A computer vision tool that analyzes skin undertones to recommend accurate base foundation matches across brands.",
+    flavor: "Artifact 5. A showcase site for our new Commander club at UW Tacoma, where a 3D deck deals seven cards and each card is a link to part of the club.",
     effect: "Whenever a creature enters the battlefield under your control, put a +1/+1 counter on it and it gains hexproof until end of turn.\n\n{T}, Pay {G}: Examine this artifact. (Opens the project. Once examined, tap it again to reopen.)"
   },
   {

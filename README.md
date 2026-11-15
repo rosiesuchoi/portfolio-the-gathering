@@ -184,7 +184,7 @@ npm run preview  # serve the production build
 
 13. The Stack
 
-Playing a card (or casting the commander) no longer resolves instantly: it goes on the Stack (`stack` in the game state) and the Stack panel lists it. "Resolve Top Item" pops the top item (last in, first out) and runs its effect. Permanents enter the battlefield on resolution; Sorceries and Instants run their effect and go to the graveyard. Triggered abilities (Orianna's card draw, K-Beauty Matcher's buff) are put on the Stack when a creature enters, and resolve the same way. K-Beauty Matcher now buffs each creature that enters while it is on the battlefield (instead of auto-buffing every creature on the board).
+Playing a card (or casting the commander) no longer resolves instantly: it goes on the Stack (`stack` in the game state) and the Stack panel lists it. "Resolve Top Item" pops the top item (last in, first out) and runs its effect. Permanents enter the battlefield on resolution; Sorceries and Instants run their effect and go to the graveyard. Triggered abilities (Orianna's card draw, MTG at UWT's buff) are put on the Stack when a creature enters, and resolve the same way. MTG at UWT now buffs each creature that enters while it is on the battlefield (instead of auto-buffing every creature on the board).
 
 14. How to Play tutorial
 
@@ -204,7 +204,7 @@ The native mouse pointer is replaced (for mouse/pen input) by a hand that points
 
 18. Project artifacts: Examine ability
 
-The five Artifact cards are projects. Each has an ability costing one mana of a specific color (Portfolio Site U, Muse Coach R, Resume Forge B, Stitch Survival W, K-Beauty Matcher G): tap a land of that color, then click the artifact to pay and open its project page (site mock, stack, description, links). After the first time it can be reopened for free. Portfolio Site is a Sorcery, so its version works by clicking it in the graveyard. Edit `src/models/projects.js` to add each project's `liveUrl`, `repoUrl`, `screenshot` (a path under `public/`), `stack` and `details`; the mock becomes a clickable link to the live site once `liveUrl` is set.
+The five Artifact cards are projects. Each has an ability costing one mana of a specific color (Portfolio Site U, Muse Coach R, Resume Forge B, Stitch Survival W, MTG at UWT G): tap a land of that color, then click the artifact to pay and open its project page (site mock, stack, description, links). After the first time it can be reopened for free. Portfolio Site is a Sorcery, so its version works by clicking it in the graveyard. Edit `src/models/projects.js` to add each project's `liveUrl`, `repoUrl`, `screenshot` (a path under `public/`), `stack` and `details`; the mock becomes a clickable link to the live site once `liveUrl` is set.
 
 19. 3D parallax
 
